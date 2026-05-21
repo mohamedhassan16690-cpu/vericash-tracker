@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Vericash · Features Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#E8002D;--dk:#09090f;--s1:#111118;--s2:#17171e;--s3:#1e1e28;--brd:rgba(255,255,255,0.07);--txt:#f0f0f5;--mut:#7a7a90;--grn:#00c896;--ylw:#f5a623;--blu:#4da6ff;--pur:#b085ff}
+body{font-family:'Syne',sans-serif;background:var(--dk);color:var(--txt);min-height:100vh}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--s1)}::-webkit-scrollbar-thumb{background:var(--s3);border-radius:3px}
+header{background:var(--s1);border-bottom:1px solid var(--brd);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:200}
+.logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:800}
+.nbadge{background:var(--red);color:#fff;padding:3px 9px;border-radius:6px;font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:1px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:7px;font-size:12px;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;border:1px solid var(--brd);background:var(--s3);color:var(--txt);transition:all .15s;text-decoration:none}
+.btn:hover{border-color:var(--red);color:var(--red)}.btn.red{background:var(--red);border-color:var(--red);color:#fff}.btn.red:hover{background:#ff1a3e}
+.hbtns{display:flex;gap:8px}
+.tabs{background:var(--s1);border-bottom:1px solid var(--brd);padding:0 28px;display:flex;overflow-x:auto}
+.tab{padding:13px 20px;cursor:pointer;font-size:13px;font-weight:600;color:var(--mut);border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;user-select:none}
+.tab:hover{color:var(--txt)}.tab.active{color:var(--red);border-bottom-color:var(--red)}
+main{padding:24px 28px;max-width:1700px;margin:0 auto}
+.panel{display:none}.panel.active{display:block}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin-bottom:22px}
+.sc{background:var(--s1);border:1px solid var(--brd);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;transition:border-color .2s}
+.sc:hover{border-color:rgba(232,0,45,.3)}.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--c,var(--red))}
+.sl{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.sv{font-size:30px;font-weight:800;color:var(--c,var(--red));line-height:1}.ss{font-size:11px;color:var(--mut);margin-top:5px}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
+@media(max-width:900px){.cgrid{grid-template-columns:1fr}}
+.ccard{background:var(--s1);border:1px solid var(--brd);border-radius:12px;padding:18px}
+.ctitle{font-size:13px;font-weight:700;margin-bottom:14px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.blbl{font-size:12px;color:var(--mut);width:175px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btrk{flex:1;background:var(--s3);border-radius:4px;height:7px;overflow:hidden}
+.bfil{height:100%;border-radius:4px;transition:width .5s ease}
+.bnum{font-size:12px;color:var(--mut);width:26px;text-align:right;font-family:'JetBrains Mono',monospace}
+.fbar{background:var(--s1);border:1px solid var(--brd);border-radius:12px;padding:13px 18px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sw{position:relative;flex:1;min-width:175px}
+.sw input{width:100%;background:var(--s3);border:1px solid var(--brd);border-radius:8px;padding:8px 12px 8px 32px;color:var(--txt);font-family:'Syne',sans-serif;font-size:13px;outline:none;transition:border-color .15s}
+.sw input:focus{border-color:var(--red)}.sico{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--mut)}
+select{background:var(--s3);border:1px solid var(--brd);border-radius:8px;padding:8px 28px 8px 11px;color:var(--txt);font-family:'Syne',sans-serif;font-size:13px;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a7a90'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;transition:border-color .15s}
+select:focus{border-color:var(--red)}
+.twrap{background:var(--s1);border:1px solid var(--brd);border-radius:12px;overflow:hidden}
+.thd{padding:13px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--brd)}
+.ttl{font-size:14px;font-weight:700}.tcnt{font-size:12px;color:var(--mut)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{background:var(--s2);padding:10px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;cursor:pointer;border-bottom:1px solid var(--brd);user-select:none}
+thead th:hover{color:var(--txt)}
+tbody td{padding:11px 12px;border-bottom:1px solid var(--brd);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}tbody tr:hover td{background:var(--s2)}
+.b{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+.bes{background:rgba(0,200,150,.15);color:#00c896}.bni{background:rgba(245,166,35,.15);color:#f5a623}
+.bbr{background:rgba(232,0,45,.15);color:#E8002D}.bin{background:rgba(77,166,255,.12);color:#4da6ff}
+.bpr{background:rgba(176,133,255,.12);color:#b085ff}.bse{background:rgba(0,200,150,.12);color:#00c896}
+.brd{background:rgba(0,200,150,.15);color:#00c896}.bad{background:rgba(77,166,255,.15);color:#4da6ff}
+.bai{background:rgba(245,166,35,.15);color:#f5a623}.brf{background:rgba(176,133,255,.15);color:#b085ff}
+.bot{background:rgba(255,255,255,.07);color:#7a7a90}
+.prio{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:700}
+.p1{background:rgba(232,0,45,.2);color:#E8002D}.p2{background:rgba(245,166,35,.2);color:#f5a623}
+.p3{background:rgba(77,166,255,.2);color:#4da6ff}.p4{background:rgba(176,133,255,.2);color:#b085ff}
+.p5{background:rgba(255,255,255,.07);color:#7a7a90}
+.dash{color:var(--mut);font-size:12px}
+.acts{display:flex;gap:5px}
+.act{background:var(--s3);border:1px solid var(--brd);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--mut);cursor:pointer;transition:all .12s;font-family:'Syne',sans-serif}
+.act:hover{border-color:var(--red);color:var(--red)}
+.kboard{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:1100px){.kboard{grid-template-columns:1fr 1fr}}
+.kcol{background:var(--s1);border:1px solid var(--brd);border-radius:12px;padding:14px;min-height:200px;transition:background .15s,border-color .15s}
+.kcol.over{background:rgba(232,0,45,.05);border-color:rgba(232,0,45,.4)}
+.khead{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+.kcnt{background:var(--s3);border-radius:20px;padding:1px 8px;font-size:11px;color:var(--mut)}
+.kcard{background:var(--s2);border:1px solid var(--brd);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:grab;user-select:none;position:relative;transition:border-color .12s,box-shadow .12s}
+.kcard:hover{border-color:var(--red);box-shadow:0 4px 16px rgba(232,0,45,.1)}.kcard.dragging{opacity:.3;cursor:grabbing}
+.ktitle{font-size:12px;font-weight:600;margin-bottom:6px;line-height:1.3;padding-right:18px}
+.kmeta{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.khandle{position:absolute;top:8px;right:8px;color:var(--mut);font-size:13px;opacity:.35;transition:opacity .12s}
+.kcard:hover .khandle{opacity:1;color:var(--red)}
+.kph{height:52px;border:2px dashed rgba(232,0,45,.35);border-radius:8px;margin-bottom:8px;background:rgba(232,0,45,.03);pointer-events:none}
+.kempty{text-align:center;padding:22px;font-size:12px;color:var(--mut);border:2px dashed var(--brd);border-radius:8px}
+.kcol.over .kempty{border-color:rgba(232,0,45,.4);color:var(--red)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--brd);border-radius:16px;width:100%;max-width:720px;max-height:90vh;overflow-y:auto;padding:26px;position:relative}
+.mtitle{font-size:17px;font-weight:800;margin-bottom:18px}
+.mclose{position:absolute;top:18px;right:18px;background:var(--s3);border:1px solid var(--brd);border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mut);font-size:15px;transition:all .12s}
+.mclose:hover{border-color:var(--red);color:var(--red)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{display:flex;flex-direction:column;gap:5px}.fg.full{grid-column:1/-1}
+.flabel{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.fi{background:var(--s3);border:1px solid var(--brd);border-radius:7px;padding:9px 12px;color:var(--txt);font-family:'Syne',sans-serif;font-size:13px;outline:none;width:100%;transition:border-color .15s}
+.fi:focus{border-color:var(--red)}textarea.fi{min-height:72px;resize:vertical}
+.faction{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.ds{margin-bottom:16px}.dst{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:1px;font-weight:600;border-bottom:1px solid var(--brd);padding-bottom:5px;margin-bottom:10px}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dk{font-size:11px;color:var(--mut);margin-bottom:2px}.dv{font-size:13px}
+.impact-tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;margin:2px;background:rgba(232,0,45,.1);color:#ff6b6b;border:1px solid rgba(232,0,45,.2)}
+.dropz{border:2px dashed var(--brd);border-radius:12px;padding:44px 24px;text-align:center;cursor:pointer;transition:all .15s}
+.dropz:hover,.dropz.over{border-color:var(--red);background:rgba(232,0,45,.04)}
+.cfg-si{padding:11px 16px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:10px;transition:background .12s}
+.cfg-si:last-child{border-bottom:none}.cfg-si:hover{background:var(--s3)}.cfg-si.active{background:rgba(232,0,45,.08);color:var(--red);font-weight:600}
+.cfg-ico{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.cfg-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--s2);border:1px solid var(--brd);border-radius:9px;margin-bottom:8px;transition:border-color .12s}
+.cfg-row:hover{border-color:rgba(232,0,45,.3)}.cfg-rl{flex:1;font-size:13px;font-weight:500}
+.cedit,.cdel{background:var(--s3);border:1px solid var(--brd);border-radius:6px;padding:3px 9px;font-size:11px;cursor:pointer;font-family:'Syne',sans-serif;transition:all .12s}
+.cedit:hover{border-color:#4da6ff;color:#4da6ff}.cdel:hover{border-color:var(--red);color:var(--red)}
+.cfg-add{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--brd);flex-wrap:wrap;align-items:flex-end}
+.cfg-ie{background:var(--s3);border:1px solid var(--red);border-radius:7px;padding:6px 10px;color:var(--txt);font-family:'Syne',sans-serif;font-size:13px;outline:none}
+.colpick{width:44px;height:36px;border:1px solid var(--brd);border-radius:7px;background:var(--s3);cursor:pointer;padding:2px}
+.toasts{position:fixed;bottom:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:7px}
+.toast{background:var(--s2);border:1px solid var(--brd);border-radius:9px;padding:11px 16px;font-size:13px;display:flex;align-items:center;gap:9px;box-shadow:0 8px 28px rgba(0,0,0,.4);animation:tin .22s ease}
+.toast.ok{border-color:#00c896}.toast.err{border-color:#E8002D}
+@keyframes tin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.empty-s{text-align:center;padding:40px;color:var(--mut);font-size:13px}
+code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mut)}
+.lnk{color:#4da6ff;font-size:11px;text-decoration:none}.lnk:hover{color:var(--red)}
+option[value="__blank__"]{color:#f5a623;font-style:italic}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><span class="nbadge">NASR</span>Vericash · Features Tracker</div>
+  <div class="hbtns"><span id="sync-ind" style="display:none;align-items:center;gap:5px;font-size:11px;color:#7a7a90"><span class="dot" style="width:7px;height:7px;border-radius:50%;background:#f5a623;display:inline-block"></span><span id="sync-txt">Connecting...</span></span>
+    <button class="btn" onclick="showTab('import')">⬆ Import</button>
+    <button class="btn" onclick="exportCSV()">⬇ Export CSV</button>
+    <button class="btn red" onclick="openAdd()">＋ Add Feature</button>
+  </div>
+</header>
+<div class="tabs">
+  <div class="tab active" onclick="showTab('overview')">Overview</div>
+  <div class="tab" onclick="showTab('table')">Feature Table</div>
+  <div class="tab" onclick="showTab('kanban')">Kanban Board</div>
+  <div class="tab" onclick="showTab('analytics')">Analytics</div>
+  <div class="tab" onclick="showTab('import')">Import / Export</div>
+  <div class="tab" onclick="showTab('config')">⚙ Config</div>
+</div>
+<main>
+<div id="tab-overview" class="panel active">
+  <div class="stat-grid" id="stat-grid"></div>
+  <div class="cgrid">
+    <div class="ccard"><div class="ctitle">Status Distribution</div><div id="ch-status"></div></div>
+    <div class="ccard"><div class="ctitle">By Change Type</div><div id="ch-type"></div></div>
+    <div class="ccard"><div class="ctitle">Release / Sprint</div><div id="ch-release"></div></div>
+    <div class="ccard"><div class="ctitle">Business Impact Categories</div><div id="ch-impact"></div></div>
+  </div>
+</div>
+<div id="tab-table" class="panel">
+  <div class="fbar">
+    <div class="sw"><span class="sico">🔍</span><input id="fq" type="text" placeholder="Search features, description, impact…" oninput="renderTable()"></div>
+    <select id="fn" onchange="renderTable()"><option value="">All Needs</option><option value="__blank__">— Blank —</option></select>
+    <select id="ft" onchange="renderTable()"><option value="">All Types</option><option value="__blank__">— Blank —</option></select>
+    <select id="fs" onchange="renderTable()"><option value="">All Statuses</option><option value="__blank__">— Blank —</option></select>
+    <select id="fr" onchange="renderTable()"><option value="">All Releases</option><option value="__blank__">— Blank —</option></select>
+    <select id="fp" onchange="renderTable()"><option value="">All Priorities</option><option value="__blank__">— Blank —</option></select>
+    <select id="fi2" onchange="renderTable()"><option value="">All Impact Types</option><option value="__blank__">— Blank —</option></select>
+    <button class="btn" onclick="clearF()">✕ Clear</button>
+  </div>
+  <div class="twrap">
+    <div class="thd"><span class="ttl">Features</span><span class="tcnt" id="tcnt"></span></div>
+    <div style="overflow-x:auto">
+      <table><thead><tr>
+        <th onclick="srt('id')">#</th>
+        <th onclick="srt('feature')">Feature</th>
+        <th onclick="srt('changeType')">Type</th>
+        <th onclick="srt('businessNeed')">Need</th>
+        <th onclick="srt('release')">Release</th>
+        <th onclick="srt('priority')">P</th>
+        <th onclick="srt('status')">Status</th>
+        <th>Business Impact</th>
+        <th>Retail</th><th>Flows</th><th>APIs</th><th>Links</th><th>Actions</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+<div id="tab-kanban" class="panel"><div class="kboard" id="kboard"></div></div>
+<div id="tab-analytics" class="panel">
+  <div class="cgrid">
+    <div class="ccard"><div class="ctitle">Mobile Flows Expected</div><div id="ch-flows"></div></div>
+    <div class="ccard"><div class="ctitle">API Integrations</div><div id="ch-apis"></div></div>
+  </div>
+  <div class="twrap">
+    <div class="thd"><span class="ttl">Scope Metrics</span></div>
+    <div style="overflow-x:auto">
+      <table><thead><tr>
+        <th>#</th><th>Feature</th><th>Release</th><th>Status</th>
+        <th>Mobile Flows</th><th>Portal Screens</th><th>APIs</th><th>Retail</th><th>Other Country</th>
+      </tr></thead><tbody id="sbody"></tbody></table>
+    </div>
+  </div>
+</div>
+<div id="tab-import" class="panel">
+  <div style="max-width:560px">
+    <div class="dropz" id="dropz" onclick="document.getElementById('fin').click()">
+      <div style="font-size:36px;margin-bottom:10px">📂</div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:5px">Drop CSV file here</div>
+      <div style="font-size:13px;color:var(--mut)">or click to browse</div>
+      <input type="file" id="fin" accept=".csv" style="display:none" onchange="handleImport(event)">
+    </div>
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" onclick="exportCSV()">⬇ Export CSV</button>
+      <button class="btn" onclick="exportJSON()">⬇ Export JSON</button>
+      <button class="btn" onclick="exportMD()">⬇ Markdown</button>
+      <button class="btn" onclick="dlTpl()">⬇ Template</button>
+    </div>
+  </div>
+</div>
+<div id="tab-config" class="panel">
+  <div style="display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start">
+    <div class="ccard" style="padding:0;overflow:hidden">
+      <div style="padding:14px 16px;border-bottom:1px solid var(--brd);font-size:13px;font-weight:700">Configurable Lists</div>
+      <div id="cfg-sb"></div>
+    </div>
+    <div class="ccard" id="cfg-ed" style="min-height:400px">
+      <div class="empty-s"><div style="font-size:32px;margin-bottom:12px">⚙</div><div style="font-size:14px;font-weight:600;margin-bottom:6px">Select a list to configure</div><div style="font-size:12px">Choose a list from the sidebar to add, edit or remove values</div></div>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- FORM MODAL -->
+<div class="overlay" id="mod-form">
+  <div class="modal">
+    <div class="mclose" onclick="closeMod('mod-form')">✕</div>
+    <div class="mtitle" id="form-ttl">Add Feature</div>
+    <div class="fgrid">
+      <div class="fg full"><div class="flabel">Feature Name *</div><input class="fi" id="fi-name" placeholder="Feature name"></div>
+      <div class="fg"><div class="flabel">Change Type</div><select class="fi" id="fi-type"></select></div>
+      <div class="fg"><div class="flabel">Business Need</div><select class="fi" id="fi-need"></select></div>
+      <div class="fg"><div class="flabel">Release</div><select class="fi" id="fi-rel"></select></div>
+      <div class="fg"><div class="flabel">Priority</div><select class="fi" id="fi-pri"></select></div>
+      <div class="fg"><div class="flabel">Status</div><select class="fi" id="fi-sta"></select></div>
+      <div class="fg"><div class="flabel">Retail / SME</div><select class="fi" id="fi-ret"></select></div>
+      <div class="fg"><div class="flabel">Other Country</div><select class="fi" id="fi-oc"></select></div>
+      <div class="fg"><div class="flabel">Mobile Flows</div><input class="fi" id="fi-fl" placeholder="e.g. (3-5)"></div>
+      <div class="fg"><div class="flabel">API Integrations</div><input class="fi" id="fi-api" placeholder="e.g. 5"></div>
+      <div class="fg"><div class="flabel">CB Link</div><input class="fi" id="fi-cb" placeholder="https://..."></div>
+      <div class="fg"><div class="flabel">Jira Link</div><input class="fi" id="fi-ji" placeholder="https://..."></div>
+      <div class="fg full"><div class="flabel">Business Impact (comma or | separated)</div><input class="fi" id="fi-bi" placeholder="e.g. Revenue Generation | Customer Retention"></div>
+      <div class="fg full"><div class="flabel">Comment</div><input class="fi" id="fi-com" placeholder="Comment"></div>
+      <div class="fg full"><div class="flabel">Business Description</div><textarea class="fi" id="fi-bd" placeholder="Business-facing description…"></textarea></div>
+      <div class="fg full"><div class="flabel">Description</div><textarea class="fi" id="fi-desc" placeholder="Technical description…"></textarea></div>
+      <div class="fg full"><div class="flabel">HL Scope</div><textarea class="fi" id="fi-hl" placeholder="High-level scope…"></textarea></div>
+    </div>
+    <div class="faction">
+      <button class="btn" onclick="closeMod('mod-form')">Cancel</button>
+      <button class="btn red" onclick="saveFeat()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="overlay" id="mod-det">
+  <div class="modal" style="max-width:780px">
+    <div class="mclose" onclick="closeMod('mod-det')">✕</div>
+    <div id="det-body"></div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+<script>
+
+// SUPABASE CONFIG
+var SB_URL="https://unvzulhjithwykasvnbw.supabase.co";
+var SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVudnp1bGhqaXRod3lrYXN2bmJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNzM4NDUsImV4cCI6MjA5NDc0OTg0NX0.JdhhPPvBL4LqLAVVL0SpOzmwKt9Uu0KcCsn9DardOjg";
+var SB_H={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"};
+var SEED_DATA=[{"id":1.0,"feature":"Click Credit Plus","change_type":"Bank Request","business_need":"Essential","business_impact":"Revenue Generation | Customer Retention | Improved Service Access & Customer Experience","release":"S 0.5","priority":1,"status":"Refinement Done","comment":null,"business_description":"Click Credit Plus is a digital loan service integrated directly into the UBA mobile app,enabling customers to discover, apply for, and track loans without visiting a branch. It streamlines credit access, shortens the loan journey, and opens a digital lending revenue channel for the bank.","description":"This feature is a renewed digital loan service named click credit plus to be integrated on the mobile app.","hl_scope":"*Mobile app UI flows for loan discovery, eligibility check, request, and status tracking *Backend integration with third party","mobile_flows":"(5-7)","portal_screens":"No Portal","api_integrations":"5","retail":"Retail only","other_country":"No","cb_link":"https://citvericash.atlassian.net/browse/CB-77","jira_link":"https://citvericash.atlassian.net/browse/UBA-29621"},{"id":2.0,"feature":"Pay By Bank","change_type":"Bank Request","business_need":"Essential","business_impact":"Revenue Generation | Customer Retention | Improved Service Access & Customer Experience","release":"S1.0","priority":1,"status":"Refinement Done","comment":null,"business_description":"Pay By Bank brings QR-based payments to UBA customers through ZonePay's next-generation payment infrastructure. Customers can pay merchants instantly by scanning a QR code, supporting both static and dynamic codes with real-time authorization and automatic reversalon failure — making cashless payments faster and more reliable across Nigeria.","description":"QR payment, despite the strong showing in some parts of the world is yet to have the same traction in Nigeria. This has largely been due to the cumbersome payment experience and operational inefficiencies. In response to these, Zone has introduced ZonePay; a next-generation QR payment solution designed to eliminate complexity and optimize performance.","hl_scope":"*Integration with ZonePay APIs&SDK for QR scanning, and transaction execution *Support for static and dynamic QR codes * Calculate fee *Debit/credit * Reversal in case of faliure *Payment authorization and confirmation flows (real-time)","mobile_flows":"(3-5)","portal_screens":"No Portal","api_integrations":"5","retail":"Retail only","other_country":"No","cb_link":"https://citvericash.atlassian.net/browse/CB-72","jira_link":"https://citvericash.atlassian.net/browse/UBA-28274"},{"id":3.0,"feature":"Airtime data lending","change_type":"Bank Request","business_need":"Essential","business_impact":"Revenue Generation | Customer Retention | Improved Service Access & Customer Experience","release":"S 0.5","priority":1,"status":"Refinement Done","comment":null,"business_description":"Airtime & Data Lending allows qualifying customers to instantly access airtime and data bundles on credit when their balance is insufficient. The service integrates with a third-party lending provider to check eligibility, present tailored offers, and maintain a borrowing history — keeping customers connected and driving loyalty.","description":"Integration of a digital lending service that allows qualifying customers to access airtime and data effortlessly even when they do not have sufficient balance.","hl_scope":"*Integration with third party APIs for check elegability *Retreive offers *Submit offers *Retrevie History","mobile_flows":"(5-7)","portal_screens":"No Portal","api_integrations":"3","retail":"Retail only","other_country":"No","cb_link":"https://citvericash.atlassian.net/browse/CB-19","jira_link":"https://citvericash.atlassian.net/browse/UBA-29359"},{"id":4.0,"feature":"PAPASS","change_type":"Bank Request","business_need":"Essential","business_impact":"Revenue Generation | Improved Service Access & Customer Experience","release":"S 1.1","priority":1,"status":"Refinement Done","comment":null,"business_description":"PAPSS (Pan-African Payment and Settlement System) enables UBA customers to send cross-border payments across Africa directly from the mobile app. It positions the bank as a key player in Africa's financial integration agenda, opening new remittance and FX revenue streams.","description":"This feature facilitates cross border payments across Africa from the mobile banking application.","hl_scope":"*Integration with PAPSS gateway * Mobile application UX * Minor Changes on the copleated anaysis","mobile_flows":"TBD","portal_screens":"TBD","api_integrations":"TBD","retail":"TBD","other_country":"TBD","cb_link":"https://citvericash.atlassian.net/browse/CB-16","jira_link":"https://citvericash.atlassian.net/browse/UBA-32491"},{"id":5.0,"feature":"Africash","change_type":"Bank Request","business_need":"Essential","business_impact":"Revenue Generation | Customer Retention | Improved Service Access & Customer Experience","release":"S 1.1","priority":1,"status":"Analysis InProgress","comment":"Pending the bank to send Updated APIs","business_description":"Africash enables intra- and inter-country money transfers across Africa, allowing customers to send funds for cash pickup or direct bank transfers continent-wide. The service strengthens UBA's pan-African identity and captures international remittance volume within the mobile platform.","description":"Africash is a secure electronic payment service that allows Intra and Inter-country money transfer. The fast and secure electronic payment service allows for sending and receiving money across Africa.","hl_scope":"* Cash Pickup: minor changes on the completed analysis * UBA 2 UBA transfer: Similar to Cash Pickup Flows","mobile_flows":"TBD","portal_screens":"TBD","api_integrations":"TBD","retail":"TBD","other_country":"TBD","cb_link":"https://citvericash.atlassian.net/browse/CB-58","jira_link":"https://citvericash.atlassian.net/browse/UBA-25035"},{"id":6.0,"feature":"Card Tokenization","change_type":"Bank Request","business_need":"Essential","business_impact":"Customer Retention | Improved Service Access & Customer Experience | Increased Security","release":"S 1.1","priority":2,"status":"Refinement Done","comment":null,"business_description":"Card Tokenization digitizes customers' physical debit, prepaid, and credit cards within the Vericash app, enabling NFC tap-to-pay functionality.It modernizes the payment experience, reduces reliance on physical cards, and positions UBA customers to transact securely at any contactless-enabled terminal.","description":"This feature digitizes customer's physical cards (Debit, Prepaid or credit cards) to enable NFC payments","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":"https://citvericash.atlassian.net/browse/UBA-16668"},{"id":7.0,"feature":"Bancassurance","change_type":"Bank Request","business_need":"Nice to Have","business_impact":"Revenue Generation | Customer Retention | Improved Service Access & Customer Experience","release":"S 1.1","priority":4,"status":"Refinement Done","comment":null,"business_description":"Bancassurance integrates insurance products directly into the Vericash app, allowing customers to browse, select, and purchase insurance plans without leaving the platform. The bank earns commission on each policy sold while deepening the financial product ecosystem available to its customers.","description":"This Integration allows customers to access different insurance plans from the application. The bank would like to integrate with an insurance company that offers various insurance products that are divided into product classes, the user will select the product, view its information and based on the type of the product there will be different flows. This service provides accessibility for the bank customer to purchase insurance products through the platform.","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":"https://citvericash.atlassian.net/browse/CB-31","jira_link":"https://citvericash.atlassian.net/browse/UBA-18435"},{"id":8.0,"feature":"Improvement in the Funds transfer process","change_type":"Bank Request","business_need":"Nice to Have","business_impact":"Customer Retention | Improved Service Access & Customer Experience","release":"S 0.5","priority":4,"status":"Refinement Done","comment":null,"business_description":"This enhancement improves the funds transfer experience by making the interface more intuitive and displaying the customer's available balance directly on the transfer screen. It reduces failed or accidental transfers, minimizes customer complaints, and builds confidence in digital transactions.","description":"Improvement on user experience for funds transfer this includes making the screen more intuitive and ensuring balance on the account is displayed at the transfer screen to ensure customersdo not initiate transfers above their available balance.","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":"https://citvericash.atlassian.net/browse/CB-33","jira_link":"https://citvericash.atlassian.net/browse/UBA-23101"},{"id":9.0,"feature":"Cheque book Request","change_type":"Bank Request","business_need":"Essential","business_impact":"Customer Retention | Improved Service Access & Customer Experience","release":"S1.0","priority":3,"status":"Refinement Done","comment":null,"business_description":"Cheque Book Request enables customers to order a new cheque book from the Vericash app in seconds, without visiting a branch or calling customer service. It streamlines a routine banking task and improves overall self-service adoption.","description":"Ability for customer to request cheque book from the app.","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":"https://citvericash.atlassian.net/browse/CB-38","jira_link":"https://citvericash.atlassian.net/browse/UBA-25076"},{"id":10.0,"feature":"Debit Card PIN Creation/Change","change_type":"Bank Request","business_need":"Essential","business_impact":"Improved Service Access & Customer Experience | Increased Security","release":"S1.0","priority":3,"status":"Refinement Done","comment":null,"business_description":"Debit Card PIN Management allows customers to create or change their debit card PIN entirely within the app , eliminating the need for branch visits or ATM trips. It improves security self-sufficiency and reduces operational pressure on branches.","description":"Allows users to create a new pin or change their debit card PIN through the app.","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":"https://citvericash.atlassian.net/browse/CB-23","jira_link":"https://citvericash.atlassian.net/browse/UBA-19443"},{"id":11.0,"feature":"Automated customer information update","change_type":"Bank Request","business_need":"Essential","business_impact":"Improved Service Access & Customer Experience | Increased Security | Operational Efficiency","release":"S1.0","priority":3,"status":"Refinement Done","comment":null,"business_description":"This feature ensures that whenever a customer's information — such as phone number, email, date of birth, or name — is updated on Finacle (core banking), those changes are automatically and instantly synchronized across all connected systems. It eliminates data inconsistencies, improves communication reliability, and supports regulatory compliance.","description":"This project aims to address the challenge of maintaining accurate and consistent customerinformation across systems by ensuring that updates to phone numbers, email addresses, dates of birth, names, and scheme codes on Finacle are synchronized in real-time. By implementing a solution that instantly propagates these changes across all relevant systems, we can enhance data accuracy, improve service reliability, and ensure seamless communication with customers.","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":"https://citvericash.atlassian.net/browse/CB-40","jira_link":"https://citvericash.atlassian.net/browse/UBA-22978"},{"id":12.0,"feature":"Customer Information update on the App","change_type":"Bank Request","business_need":"Essential","business_impact":"Improved Service Access & Customer Experience | Operational Efficiency","release":"S1.0","priority":2,"status":"Refinement Done","comment":null,"business_description":"Customer Information Update on the App empowers customers to update their personal details directly through Vericash, with changes reflecting in core banking in real time. It reduces branch dependency for routine data updates and ensures the bank always holds accurate, current customer records.","description":"This feature is to allow for Bank customers to update their information on core banking through the mobile app.","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":"https://citvericash.atlassian.net/browse/CB-54","jira_link":"https://citvericash.atlassian.net/browse/UBA-23838"},{"id":13.0,"feature":"LexisNexis ThreatMetrix Behavioral and Digital Fraud Management Implementation","change_type":"Bank Request","business_need":"Nice to Have","business_impact":"Increased Security | Risk Reduction","release":"S1.0","priority":5,"status":"Analysis InProgress","comment":null,"business_description":"LexisNexis ThreatMetrix is a behavioral and device intelligence platform that detects fraudulent activity by analyzing how users interact with the app and the digital fingerprint of their devices. Integrating it strengthens UBA's fraud defenses, protects customers from account takeover, and reduces financial losses from digital fraud.","description":"Integration with Digital Fraud Management system","hl_scope":"TBD","mobile_flows":"TBD","portal_screens":"TBD","api_integrations":"TBD","retail":"TBD","other_country":"TBD","cb_link":null,"jira_link":null},{"id":14.0,"feature":"PostHug Ph2","change_type":"Internal Enabler","business_need":"Essential","business_impact":"Operational Efficiency | Support Cost Reduction | Data Quality & Analytics","release":"S1.0","priority":3,"status":"Analysis InProgress","comment":null,"business_description":"PostHug Ph2 completes the core transactional backbone of Vericash by finalizing all remaining customer onboarding flows and enabling the primary payment transaction types: UTO, UTU, Topup, and VAS Bill Payments. It closes the gaps that force users to fall back on USSD or branch visits, removes the highest-volume contact center triggers (Forgot Password, Forgot PIN), and ensures every customer who opens the app can complete their full banking journey end-to-end.","description":"1. Rest of Registrations beyond the card and Liveness (May ignore actions with very little load) 2. Rest of “Add and Activate” beyond Liveness Check (May ignore actions with very little load) 3. The main transaction types a. UTO b. UTU c. Topup d. VAS Bill Payments Optional (Based on capacity) 1. Forget Password 2. Forget PIN","hl_scope":null,"mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":"https://citvericash.atlassian.net/browse/UBA-29865","jira_link":null},{"id":15.0,"feature":"Statement Download CR (Third Party)","change_type":"Bank Request","business_need":"Nice to Have","business_impact":"Customer Retention | Improved Service Access & Customer Experience","release":"S 1.1","priority":4,"status":"Analysis InProgress","comment":null,"business_description":"Statement Download to Third Party allows customers to share their official bank statement with any external party — such as a lender or employer — by entering a third-party email address directly in the app. It removes friction from financial processes that require proof of income or account history.","description":"Allow customer to send bank statement to third party by adding third-party email","hl_scope":"Integration with current Vendor","mobile_flows":"(2-3)","portal_screens":"No Portal","api_integrations":"2","retail":"Retail & SME","other_country":"Yes","cb_link":"https://citvericash.atlassian.net/browse/CB-80","jira_link":"https://citvericash.atlassian.net/browse/UBA-30212"},{"id":16.0,"feature":"USD PREPAID CARD to UBA Account and vise versa","change_type":"Bank Request","business_need":"Nice to Have","business_impact":"Revenue Generation | Improved Service Access & Customer Experience","release":"S 1.1","priority":4,"status":"Analysis InProgress","comment":null,"business_description":"USD Prepaid Card Funding enables customers to move funds between their domiciliary accounts (USD) and their prepaid cards in both directions — funding the card from the account, or returning funds back. It gives customers greater flexibility in managing their foreign currency within the app.","description":"Funding of Prepaid Cards from Domiciliary Accounts (USD) Transfer of funds from Prepaid Cards back to the originating domiciliary accounts","hl_scope":"TBD","mobile_flows":"TBD","portal_screens":"TBD","api_integrations":"TBD","retail":"TBD","other_country":"TBD","cb_link":"https://citvericash.atlassian.net/browse/CB-71","jira_link":"https://citvericash.atlassian.net/browse/UBA-30200"},{"id":17.0,"feature":"Transaction Receipt new Parameters","change_type":"Bank Request","business_need":"Nice to Have","business_impact":"Customer Retention | Improved Service Access & Customer Experience","release":"S 0.5","priority":5,"status":"Refinement Done","comment":"Receipt Management","business_description":"Transaction Receipt Enhancement improves the layout, parameters, and information displayed on digital receipts after every transaction. Customers get clearer, more complete confirmation of their transactions, reducing confusion and support inquiries related to payment details.","description":"improve the user experience of the transaction receipt","hl_scope":"adding new parameters arrangment of parameters add disclaimer","mobile_flows":"1","portal_screens":"No Portal","api_integrations":"0","retail":"Yes","other_country":"Yes","cb_link":"https://citvericash.atlassian.net/browse/CB-76","jira_link":"https://citvericash.atlassian.net/browse/UBA-30211"},{"id":18.0,"feature":"New LifeStyle Food service","change_type":"Bank Request","business_need":"Essential","business_impact":"Revenue Generation | Customer Retention | Improved Customer Engagement","release":null,"priority":1,"status":"Analysis InProgress","comment":"Bank asked to Hold","business_description":"New Lifestyle Food Service integrates Chowdeck's food ordering platform directly into the Vericash app, allowing customers to browse restaurants, place orders, and pay without leaving the banking app. It increases daily app engagement and positions Vericash as a lifestyle super-app beyond traditional banking.","description":"Allow customers would be able to place food orders on Chowdeck directly through the vericash mobile app.","hl_scope":"Same as Trips, HL scope will be shared shortly","mobile_flows":"TBD","portal_screens":"TBD","api_integrations":"TBD","retail":"TBD","other_country":"TBD","cb_link":"https://citvericash.atlassian.net/browse/CB-83","jira_link":"https://citvericash.atlassian.net/browse/UBA-30205"},{"id":19.0,"feature":"Push Notification Exclusion","change_type":"Bank Request","business_need":"Nice to Have","business_impact":"Customer Retention | Improved Customer Engagement","release":"S 1.1","priority":5,"status":"Refinement Done","comment":null,"business_description":"Push Notification Exclusion gives customers control over whether they receive push notifications from the app. This reduces notification fatigue, respects customer preferences, and improves overall satisfaction with the app experience.","description":"Allow customer to enable/disable notification receving","hl_scope":"add new option to mobile app allow customer enabling/disabling recving of the notification","mobile_flows":"(1-2)","portal_screens":"No Portal","api_integrations":"0","retail":"Yes","other_country":"Yes","cb_link":"https://citvericash.atlassian.net/browse/CB-85","jira_link":"https://citvericash.atlassian.net/browse/UBA-30206"},{"id":20.0,"feature":"Email & Mobile No. Update from the App","change_type":"Bank Request","business_need":"Essential","business_impact":"Customer Retention | Improved Service Access & Customer Experience","release":"S 1.1","priority":2,"status":"Refinement Done","comment":null,"business_description":"Email & Mobile Number Update allows customers to change their registered phone number and email address directly through the Vericash app, with proper validation and authentication. It ensures the bank always has accurate contact details without requiring a branch visit.","description":"Allow customer to update phone numbers and email addresses through mobile application","hl_scope":"New App UX to let the user update his Mobile No and Email, with Validation and Authintication","mobile_flows":"(2-3)","portal_screens":null,"api_integrations":"(2-3)","retail":"Yes","other_country":"Yes","cb_link":"https://citvericash.atlassian.net/browse/CB-86","jira_link":"https://citvericash.atlassian.net/browse/UBA-30213"},{"id":21.0,"feature":"User-Name App Enablement","change_type":"Internal Enabler","business_need":"Essential","business_impact":"Improved Service Access & Customer Experience | Increased Security","release":"S 0.5","priority":2,"status":"Refinement Done","comment":null,"business_description":"Username Authentication introduces a personalized login experience by allowing customers to create and use a unique username — instead of an account number — during registration and login. It simplifies access, reduces login errors, and brings the app in line with modern digital banking standards.","description":"implement account Username authentication by creating the username during the registration process and logging into the mobile application using the username","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":"https://citvericash.atlassian.net/browse/UBA-19298"},{"id":22.0,"feature":"Generic Self-Services","change_type":"Internal Enabler","business_need":"Essential","business_impact":"Improved Service Access & Customer Experience | Operational Efficiency","release":"S1.0","priority":3,"status":"Analysis Done/Migration from Product","comment":null,"business_description":"Generic Self-Services is an internal platform capability that allows the bank's operations team to add, remove, or configure any self-service feature, screen, or parameter through the portal — without requiring new development. It significantly reduces time-to-market for future service changes.","description":"New component enable Add, remove and configure any Service, screen or parameters of self services","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":"https://citvericash.atlassian.net/browse/UBA-27382"},{"id":23.0,"feature":"AI-Powered Help","change_type":"New Product Feature","business_need":"Nice to Have","business_impact":"Customer Retention | Improved Service Access & Customer Experience","release":"S1.0","priority":4,"status":"Analysis Done/Migration from Product","comment":null,"business_description":null,"description":null,"hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":null},{"id":24.0,"feature":"Rewards Enhancements","change_type":"New Product Feature","business_need":"Essential","business_impact":"Revenue Generation | Customer Retention | Improved Customer Engagement","release":"S 0.5","priority":2,"status":"Refinement Done","comment":null,"business_description":"Rewards Enhancements adds a manual, portal-based review option for customer rewards alongside the existing automated system. It gives the bank's operations team greater control and flexibility to manage rewards programs, handle exceptions, and ensure fair reward distribution.","description":"Allow rewards-review based form the portal as a second option in addation to automated option","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":"https://citvericash.atlassian.net/browse/UBA-29653"},{"id":25.0,"feature":"Receipt Management","change_type":"Internal Enabler","business_need":"Essential","business_impact":"Improved Service Access & Customer Experience | Operational Efficiency","release":"S 0.5","priority":3,"status":"Analysis Done/Migration from Product","comment":null,"business_description":"Receipt Management is a portal-based tool that enables operations teams to configure, restructure, add, or remove transaction receipt templates without code changes. It decouples receipt management from the development cycle and speeds up any future updates to how receipts look and what they contain.","description":"Allow portal management for the receipt to suppor t adding, removing and restrecture the service receipt","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":"https://citvericash.atlassian.net/browse/UBA-29687"},{"id":26.0,"feature":"PFM","change_type":"New Product Feature","business_need":"Nice to Have","business_impact":"Customer Retention | Improved Service Access & Customer Experience | Improved Customer Engagement","release":"S 1.1","priority":5,"status":"Analysis Done/Migration from Product","comment":null,"business_description":"Personal Financial Management (PFM) is a smart in-app financial tool that helps customers track their spending, set budgets, and analyze their financial patterns over time. It deepens customer engagement with the app and positions UBA as a proactive financial partner, not just a transaction platform.","description":"A smart financial companion that helps users track spending, set budgets, analyse patterns, and make informed decisions to stay in control of their money.","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":"https://citvericash.atlassian.net/browse/UBA-29675"},{"id":27.0,"feature":"Payment Requests/Methods (Pay for me)","change_type":"New Product Feature","business_need":"Nice to Have","business_impact":"Revenue Generation | Customer Retention | Improved Customer Engagement","release":"S 1.1","priority":5,"status":"Analysis Done/Migration from Product","comment":null,"business_description":"Payment Requests & Methods introduces social and group payment features — including 'Pay for me' requests, money collection from individuals or groups, and bill splitting — with real-time tracking and automated reminders. It brings modern peer-to-peer payment capabilities to UBA customers and drives transaction volume.","description":"A unified payments feature that enables users to send “pay for me” requests, collect money from individuals or groups, and split payments instantly with full tracking and reminders.","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":"https://citvericash.atlassian.net/browse/UBA-29912"},{"id":28.0,"feature":"Marketing Requests (AI upselling / cross selling)","change_type":"New Product Feature","business_need":"Nice to Have","business_impact":"Revenue Generation | Customer Retention | Improved Customer Engagement","release":"S1.0","priority":5,"status":"Analysis Done/Migration from Product","comment":null,"business_description":"AI-Powered Marketing delivers personalized product recommendations and upselling messages to customers based on their behavior, spending patterns, and financial profile. It enables the bank to surface the right offer to the right customer at the right moment, increasing product uptake and revenue.","description":"A targeted engagement engine that delivers personalized marketing messages and upselling offers based on user behavior, preferences, and financial patterns.","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":"https://citvericash.atlassian.net/browse/UBA-29895"},{"id":29.0,"feature":"Genaric LifeStyle","change_type":"New Product Feature","business_need":"Essential","business_impact":"Revenue Generation | Customer Retention | Improved Customer Engagement","release":"S1.0","priority":1,"status":"Analysis Done/Migration from Product","comment":null,"business_description":"Generic Lifestyle is a configurable in-app marketplace that aggregates lifestyle services — including event bookings, movie tickets, restaurant reservations, and more — into a single seamless experience. New service partners can be onboarded rapidly through the portal, allowing UBA to continuously expand its non-banking value proposition.","description":"A flexible lifestyle engine that aggregates event bookings, movie tickets, restaurant reservations, and any new partner service into one seamless experience. All services are fully configurable and manageable through the portal, enabling rapid onboarding of new providers.","hl_scope":"Complete Scope Exist in the Epic","mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":"https://citvericash.atlassian.net/browse/UBA-29866"},{"id":30.0,"feature":"Integrate PayPal APIs into the Vericash Mobile App to enable cross-border and global payments.","change_type":"Bank Request","business_need":"Essential","business_impact":"Revenue Generation | Customer Retention | Improved Customer Engagement","release":"S 0.5","priority":1,"status":"Refinement Done","comment":null,"business_description":null,"description":null,"hl_scope":null,"mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":"https://citvericash.atlassian.net/browse/CB-102","jira_link":"https://citvericash.atlassian.net/browse/UBA-32201"},{"id":31.0,"feature":"Card Request - Branch and Home delivery","change_type":"Bank Request","business_need":"Nice to Have","business_impact":"Customer Retention | Improved Service Access & Customer Experience","release":"S 1.1","priority":5,"status":"Refinement Done","comment":null,"business_description":null,"description":null,"hl_scope":null,"mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":"https://citvericash.atlassian.net/browse/CB-84","jira_link":"https://citvericash.atlassian.net/browse/UBA-30214"},{"id":32.0,"feature":"Home screen UI/UX Revamp","change_type":"Bank Request","business_need":"Essential","business_impact":"Customer Retention | Feature Discovery | Brand Perception","release":"S 0.5","priority":null,"status":"Refinement Done","comment":null,"business_description":null,"description":null,"hl_scope":null,"mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":"https://citvericash.atlassian.net/browse/UBA-32396"},{"id":33.0,"feature":"Login for Non-UBA customers","change_type":"Bank Request","business_need":"Essential","business_impact":"New User Acquisition | Competitive Positioning","release":"S1.0","priority":null,"status":"Refinement Done","comment":null,"business_description":null,"description":null,"hl_scope":null,"mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":"https://citvericash.atlassian.net/browse/UBA-32655"},{"id":34.0,"feature":"Bill payment for Non-UBA customers","change_type":"Bank Request","business_need":"Essential","business_impact":"Revenue Generation","release":"S1.0","priority":null,"status":"Analysis InProgress","comment":null,"business_description":null,"description":null,"hl_scope":null,"mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":null},{"id":35.0,"feature":"Voluntary Opt-Out/Opt-In Functionality for IP Service","change_type":"Bank Request","business_need":"Essential","business_impact":"Increased Security","release":null,"priority":null,"status":"Ready for Refinement","comment":null,"business_description":null,"description":null,"hl_scope":null,"mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":"https://citvericash.atlassian.net/browse/CB-111","jira_link":"https://citvericash.atlassian.net/browse/UBA-36584"},{"id":36.0,"feature":"Biometric change security","change_type":"Security enahncement","business_need":null,"business_impact":"Increased Security","release":null,"priority":null,"status":"Ready for Refinement","comment":null,"business_description":null,"description":null,"hl_scope":null,"mobile_flows":null,"portal_screens":null,"api_integrations":null,"retail":null,"other_country":null,"cb_link":null,"jira_link":"https://citvericash.atlassian.net/browse/UBA-36270"}];
+
+async function dbLoad(){
+  var r=await fetch(SB_URL+"/rest/v1/features?order=id&select=*",{headers:SB_H});
+  if(!r.ok){var t=await r.text();throw new Error(r.status+" "+t);}
+  return r.json();
+}
+async function dbUpsertAll(rows){
+  var r=await fetch(SB_URL+"/rest/v1/features",{method:"POST",headers:{...SB_H,"Prefer":"resolution=merge-duplicates,return=minimal"},body:JSON.stringify(rows)});
+  if(!r.ok){var t=await r.text();throw new Error(r.status+" "+t);}
+}
+async function dbUpdate(id,data){
+  var r=await fetch(SB_URL+"/rest/v1/features?id=eq."+id,{method:"PATCH",headers:{...SB_H,"Prefer":"return=minimal"},body:JSON.stringify(data)});
+  if(!r.ok){var t=await r.text();throw new Error(r.status+" "+t);}
+}
+async function dbDelete(id){
+  var r=await fetch(SB_URL+"/rest/v1/features?id=eq."+id,{method:"DELETE",headers:{...SB_H,"Prefer":"return=minimal"}});
+  if(!r.ok){var t=await r.text();throw new Error(r.status+" "+t);}
+}
+async function dbInsert(data){
+  var r=await fetch(SB_URL+"/rest/v1/features",{method:"POST",headers:{...SB_H,"Prefer":"resolution=merge-duplicates,return=minimal"},body:JSON.stringify(data)});
+  if(!r.ok){var t=await r.text();throw new Error(r.status+" "+t);}
+}
+function dbToApp(r){return{id:r.id,feature:r.feature||"",changeType:r.change_type||"",businessNeed:r.business_need||"",businessImpact:r.business_impact||"",release:r.release||"",priority:r.priority,status:r.status||"",comment:r.comment||"",businessDescription:r.business_description||"",description:r.description||"",hlScope:r.hl_scope||"",mobileFlows:r.mobile_flows||"",portalScreens:r.portal_screens||"",apiIntegrations:r.api_integrations||"",retail:r.retail||"",otherCountry:r.other_country||"",cbLink:r.cb_link||"",jiraLink:r.jira_link||""};}
+function appToDB(f){return{id:f.id,feature:f.feature,change_type:f.changeType||null,business_need:f.businessNeed||null,business_impact:f.businessImpact||null,release:f.release||null,priority:f.priority||null,status:f.status||null,comment:f.comment||null,business_description:f.businessDescription||null,description:f.description||null,hl_scope:f.hlScope||null,mobile_flows:f.mobileFlows||null,portal_screens:f.portalScreens||null,api_integrations:f.apiIntegrations||null,retail:f.retail||null,other_country:f.otherCountry||null,cb_link:f.cbLink||null,jira_link:f.jiraLink||null};}
+
+var _sbReady=false;
+
+function setSyncUI(txt,color){
+  var ind=document.getElementById("sync-ind"),dotEl=document.querySelector(".dot"),txtEl=document.getElementById("sync-txt");
+  if(ind)ind.style.display="flex";
+  if(dotEl)dotEl.style.background=color;
+  if(txtEl)txtEl.textContent=txt;
+}
+
+async function initDB(){
+  setSyncUI("Connecting...","#f5a623");
+  try{
+    var rows=await dbLoad();
+    if(rows.length===0){
+      setSyncUI("Seeding data...","#f5a623");
+      await dbUpsertAll(SEED_DATA);
+      rows=await dbLoad();
+    }
+    features=rows.map(dbToApp);
+    var maxId=Math.max.apply(null,features.map(function(f){return Number(f.id)||0;}).concat([36]));
+    nextId=maxId+1;
+    _sbReady=true;
+    setSyncUI("Live - shared with team (#"+rows.length+")","#00c896");
+    populateFormDropdowns();
+    populateFilters();
+    renderAll();
+  }catch(e){
+    setSyncUI("DB Error: "+e.message.substring(0,50),"#E8002D");
+    console.error("Supabase error:",e);
+  }
+}
+
+async function dbSaveFeature(f){
+  if(!_sbReady)return;
+  setSyncUI("Saving...","#f5a623");
+  try{
+    await dbUpdate(f.id,appToDB(f));
+    setSyncUI("Saved","#00c896");
+    setTimeout(function(){setSyncUI("Live - shared with team","#00c896");},2000);
+  }catch(e){setSyncUI("Save error: "+e.message.substring(0,40),"#E8002D");console.error(e);}
+}
+async function dbSaveNew(f){
+  if(!_sbReady)return;
+  setSyncUI("Saving...","#f5a623");
+  try{
+    await dbInsert(appToDB(f));
+    setSyncUI("Saved","#00c896");
+    setTimeout(function(){setSyncUI("Live - shared with team","#00c896");},2000);
+  }catch(e){setSyncUI("Save error: "+e.message.substring(0,40),"#E8002D");console.error(e);}
+}
+async function dbDelFeature(id){
+  if(!_sbReady)return;
+  try{await dbDelete(id);}catch(e){console.error(e);}
+}
+
+setInterval(async function(){
+  if(!_sbReady)return;
+  try{var rows=await dbLoad();if(rows.length!==features.length){features=rows.map(dbToApp);renderAll();}}catch(e){}
+},20000);
+
+
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const FEATURES=[{"id":1.0,"feature":"Click Credit Plus","changeType":"Bank Request","businessImpact":"Revenue Generation Customer Retention Improved Service Access & Customer Experience","release":"S 0.5","businessNeed":"Essential","priority":1,"cbLink":"https://citvericash.atlassian.net/browse/CB-77","jiraLink":"https://citvericash.atlassian.net/browse/UBA-29621","status":"Refinement Done","comment":"","businessDescription":"Click Credit Plus is a digital loan service integrated directly into the UBA mobile app,enabling customers to discover, apply for, and track loans without visiting a branch. It streamlines credit access, shortens the loan journey, and opens a digital lending revenue channel for the bank.","description":"This feature is a renewed digital loan service named click credit plus to be integrated on the mobile app.","hlScope":"*Mobile app UI flows for loan discovery, eligibility check, request, and status tracking *Backend integration with third party","mobileFlows":"(5-7)","portalScreens":"No Portal","apiIntegrations":"5","retail":"Retail only","otherCountry":"No"},{"id":2.0,"feature":"Pay By Bank","changeType":"Bank Request","businessImpact":"Revenue Generation Improved Service Access & Customer Experience Customer Retention","release":"S1.0","businessNeed":"Essential","priority":1,"cbLink":"https://citvericash.atlassian.net/browse/CB-72","jiraLink":"https://citvericash.atlassian.net/browse/UBA-28274","status":"Refinement Done","comment":"","businessDescription":"Pay By Bank brings QR-based payments to UBA customers through ZonePay's next-generation payment infrastructure. Customers can pay merchants instantly by scanning a QR code, supporting both static and dynamic codes with real-time authorization and automatic reversalon failure — making cashless payments faster and more reliable across Nigeria.","description":"QR payment, despite the strong showing in some parts of the world is yet to have the same traction in Nigeria. This has largely been due to the cumbersome payment experience and operational inefficiencies. In response to these, Zone has introduced ZonePay; a next-generation QR payment solution designed to eliminate complexity and optimize performance.","hlScope":"*Integration with ZonePay APIs&SDK for QR scanning, and transaction execution *Support for static and dynamic QR codes * Calculate fee *Debit/credit * Reversal in case of faliure *Payment authorization and confirmation flows (real-time)","mobileFlows":"(3-5)","portalScreens":"No Portal","apiIntegrations":"5","retail":"Retail only","otherCountry":"No"},{"id":3.0,"feature":"Airtime data lending","changeType":"Bank Request","businessImpact":"Customer Retention Improved Service Access & Customer Experience Revenue Generation","release":"S 0.5","businessNeed":"Essential","priority":1,"cbLink":"https://citvericash.atlassian.net/browse/CB-19","jiraLink":"https://citvericash.atlassian.net/browse/UBA-29359","status":"Refinement Done","comment":"","businessDescription":"Airtime & Data Lending allows qualifying customers to instantly access airtime and data bundles on credit when their balance is insufficient. The service integrates with a third-party lending provider to check eligibility, present tailored offers, and maintain a borrowing history — keeping customers connected and driving loyalty.","description":"Integration of a digital lending service that allows qualifying customers to access airtime and data effortlessly even when they do not have sufficient balance.","hlScope":"*Integration with third party APIs for check elegability *Retreive offers *Submit offers *Retrevie History","mobileFlows":"(5-7)","portalScreens":"No Portal","apiIntegrations":"3","retail":"Retail only","otherCountry":"No"},{"id":4.0,"feature":"PAPASS","changeType":"Bank Request","businessImpact":"Revenue Generation Improved Service Access & Customer Experience","release":"S 1.1","businessNeed":"Essential","priority":1,"cbLink":"https://citvericash.atlassian.net/browse/CB-16","jiraLink":"https://citvericash.atlassian.net/browse/UBA-32491","status":"Refinement Done","comment":"","businessDescription":"PAPSS (Pan-African Payment and Settlement System) enables UBA customers to send cross-border payments across Africa directly from the mobile app. It positions the bank as a key player in Africa's financial integration agenda, opening new remittance and FX revenue streams.","description":"This feature facilitates cross border payments across Africa from the mobile banking application.","hlScope":"*Integration with PAPSS gateway * Mobile application UX * Minor Changes on the copleated anaysis","mobileFlows":"TBD","portalScreens":"TBD","apiIntegrations":"TBD","retail":"TBD","otherCountry":"TBD"},{"id":5.0,"feature":"Africash","changeType":"Bank Request","businessImpact":"Revenue Generation Improved Service Access & Customer Experience Customer Retention","release":"S 1.1","businessNeed":"Essential","priority":1,"cbLink":"https://citvericash.atlassian.net/browse/CB-58","jiraLink":"https://citvericash.atlassian.net/browse/UBA-25035","status":"Analysis InProgress","comment":"Pending the bank to send Updated APIs","businessDescription":"Africash enables intra- and inter-country money transfers across Africa, allowing customers to send funds for cash pickup or direct bank transfers continent-wide. The service strengthens UBA's pan-African identity and captures international remittance volume within the mobile platform.","description":"Africash is a secure electronic payment service that allows Intra and Inter-country money transfer. The fast and secure electronic payment service allows for sending and receiving money across Africa.","hlScope":"* Cash Pickup: minor changes on the completed analysis * UBA 2 UBA transfer: Similar to Cash Pickup Flows","mobileFlows":"TBD","portalScreens":"TBD","apiIntegrations":"TBD","retail":"TBD","otherCountry":"TBD"},{"id":6.0,"feature":"Card Tokenization","changeType":"Bank Request","businessImpact":"Increased Security Improved Service Access & Customer Experience Customer Retention","release":"S 1.1","businessNeed":"Essential","priority":2,"cbLink":"","jiraLink":"https://citvericash.atlassian.net/browse/UBA-16668","status":"Refinement Done","comment":"","businessDescription":"Card Tokenization digitizes customers' physical debit, prepaid, and credit cards within the Vericash app, enabling NFC tap-to-pay functionality.It modernizes the payment experience, reduces reliance on physical cards, and positions UBA customers to transact securely at any contactless-enabled terminal.","description":"This feature digitizes customer's physical cards (Debit, Prepaid or credit cards) to enable NFC payments","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":7.0,"feature":"Bancassurance","changeType":"Bank Request","businessImpact":"Revenue Generation Improved Service Access & Customer Experience Customer Retention","release":"S 1.1","businessNeed":"Nice to Have","priority":4,"cbLink":"https://citvericash.atlassian.net/browse/CB-31","jiraLink":"https://citvericash.atlassian.net/browse/UBA-18435","status":"Refinement Done","comment":"","businessDescription":"Bancassurance integrates insurance products directly into the Vericash app, allowing customers to browse, select, and purchase insurance plans without leaving the platform. The bank earns commission on each policy sold while deepening the financial product ecosystem available to its customers.","description":"This Integration allows customers to access different insurance plans from the application. The bank would like to integrate with an insurance company that offers various insurance products that are divided into product classes, the user will select the product, view its information and based on the type of the product there will be different flows. This service provides accessibility for the bank customer to purchase insurance products through the platform.","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":8.0,"feature":"Improvement in the Funds transfer process","changeType":"Bank Request","businessImpact":"Improved Service Access & Customer Experience Customer Retention","release":"S 0.5","businessNeed":"Nice to Have","priority":4,"cbLink":"https://citvericash.atlassian.net/browse/CB-33","jiraLink":"https://citvericash.atlassian.net/browse/UBA-23101","status":"Refinement Done","comment":"","businessDescription":"This enhancement improves the funds transfer experience by making the interface more intuitive and displaying the customer's available balance directly on the transfer screen. It reduces failed or accidental transfers, minimizes customer complaints, and builds confidence in digital transactions.","description":"Improvement on user experience for funds transfer this includes making the screen more intuitive and ensuring balance on the account is displayed at the transfer screen to ensure customersdo not initiate transfers above their available balance.","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":9.0,"feature":"Cheque book Request","changeType":"Bank Request","businessImpact":"Improved Service Access & Customer Experience Customer Retention","release":"S1.0","businessNeed":"Essential","priority":3,"cbLink":"https://citvericash.atlassian.net/browse/CB-38","jiraLink":"https://citvericash.atlassian.net/browse/UBA-25076","status":"Refinement Done","comment":"","businessDescription":"Cheque Book Request enables customers to order a new cheque book from the Vericash app in seconds, without visiting a branch or calling customer service. It streamlines a routine banking task and improves overall self-service adoption.","description":"Ability for customer to request cheque book from the app.","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":10.0,"feature":"Debit Card PIN Creation/Change","changeType":"Bank Request","businessImpact":"Increased Security Improved Service Access & Customer Experience","release":"S1.0","businessNeed":"Essential","priority":3,"cbLink":"https://citvericash.atlassian.net/browse/CB-23","jiraLink":"https://citvericash.atlassian.net/browse/UBA-19443","status":"Refinement Done","comment":"","businessDescription":"Debit Card PIN Management allows customers to create or change their debit card PIN entirely within the app , eliminating the need for branch visits or ATM trips. It improves security self-sufficiency and reduces operational pressure on branches.","description":"Allows users to create a new pin or change their debit card PIN through the app.","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":11.0,"feature":"Automated customer information update","changeType":"Bank Request","businessImpact":"Increased Security Improved Service Access & Customer Experience Operational Efficiency","release":"S1.0","businessNeed":"Essential","priority":3,"cbLink":"https://citvericash.atlassian.net/browse/CB-40","jiraLink":"https://citvericash.atlassian.net/browse/UBA-22978","status":"Refinement Done","comment":"","businessDescription":"This feature ensures that whenever a customer's information — such as phone number, email, date of birth, or name — is updated on Finacle (core banking), those changes are automatically and instantly synchronized across all connected systems. It eliminates data inconsistencies, improves communication reliability, and supports regulatory compliance.","description":"This project aims to address the challenge of maintaining accurate and consistent customerinformation across systems by ensuring that updates to phone numbers, email addresses, dates of birth, names, and scheme codes on Finacle are synchronized in real-time. By implementing a solution that instantly propagates these changes across all relevant systems, we can enhance data accuracy, improve service reliability, and ensure seamless communication with customers.","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":12.0,"feature":"Customer Information update on the App","changeType":"Bank Request","businessImpact":"Improved Service Access & Customer Experience Operational Efficiency","release":"S1.0","businessNeed":"Essential","priority":2,"cbLink":"https://citvericash.atlassian.net/browse/CB-54","jiraLink":"https://citvericash.atlassian.net/browse/UBA-23838","status":"Refinement Done","comment":"","businessDescription":"Customer Information Update on the App empowers customers to update their personal details directly through Vericash, with changes reflecting in core banking in real time. It reduces branch dependency for routine data updates and ensures the bank always holds accurate, current customer records.","description":"This feature is to allow for Bank customers to update their information on core banking through the mobile app.","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":13.0,"feature":"LexisNexis ThreatMetrix Behavioral and Digital Fraud Management Implementation","changeType":"Bank Request","businessImpact":"Increased Security Risk Reduction","release":"S1.0","businessNeed":"Nice to Have","priority":5,"cbLink":"","jiraLink":"","status":"Analysis InProgress","comment":"","businessDescription":"LexisNexis ThreatMetrix is a behavioral and device intelligence platform that detects fraudulent activity by analyzing how users interact with the app and the digital fingerprint of their devices. Integrating it strengthens UBA's fraud defenses, protects customers from account takeover, and reduces financial losses from digital fraud.","description":"Integration with Digital Fraud Management system","hlScope":"TBD","mobileFlows":"TBD","portalScreens":"TBD","apiIntegrations":"TBD","retail":"TBD","otherCountry":"TBD"},{"id":14.0,"feature":"PostHug Ph2","changeType":"Internal Enabler","businessImpact":"Operational Efficiency Support Cost Reduction Data Quality & Analytics","release":"S1.0","businessNeed":"Essential","priority":3,"cbLink":"https://citvericash.atlassian.net/browse/UBA-29865","jiraLink":"","status":"Analysis InProgress","comment":"","businessDescription":"PostHug Ph2 completes the core transactional backbone of Vericash by finalizing all remaining customer onboarding flows and enabling the primary payment transaction types: UTO, UTU, Topup, and VAS Bill Payments. It closes the gaps that force users to fall back on USSD or branch visits, removes the highest-volume contact center triggers (Forgot Password, Forgot PIN), and ensures every customer who opens the app can complete their full banking journey end-to-end.","description":"1. Rest of Registrations beyond the card and Liveness (May ignore actions with very little load) 2. Rest of “Add and Activate” beyond Liveness Check (May ignore actions with very little load) 3. The main transaction types a. UTO b. UTU c. Topup d. VAS Bill Payments Optional (Based on capacity) 1. Forget Password 2. Forget PIN","hlScope":"","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":15.0,"feature":"Statement Download CR (Third Party)","changeType":"Bank Request","businessImpact":"Improved Service Access & Customer Experience Customer Retention","release":"S 1.1","businessNeed":"Nice to Have","priority":4,"cbLink":"https://citvericash.atlassian.net/browse/CB-80","jiraLink":"https://citvericash.atlassian.net/browse/UBA-30212","status":"Analysis InProgress","comment":"","businessDescription":"Statement Download to Third Party allows customers to share their official bank statement with any external party — such as a lender or employer — by entering a third-party email address directly in the app. It removes friction from financial processes that require proof of income or account history.","description":"Allow customer to send bank statement to third party by adding third-party email","hlScope":"Integration with current Vendor","mobileFlows":"(2-3)","portalScreens":"No Portal","apiIntegrations":"2","retail":"Retail & SME","otherCountry":"Yes"},{"id":16.0,"feature":"USD PREPAID CARD to UBA Account and vise versa","changeType":"Bank Request","businessImpact":"Improved Service Access & Customer Experience Revenue Generation","release":"S 1.1","businessNeed":"Nice to Have","priority":4,"cbLink":"https://citvericash.atlassian.net/browse/CB-71","jiraLink":"https://citvericash.atlassian.net/browse/UBA-30200","status":"Analysis InProgress","comment":"","businessDescription":"USD Prepaid Card Funding enables customers to move funds between their domiciliary accounts (USD) and their prepaid cards in both directions — funding the card from the account, or returning funds back. It gives customers greater flexibility in managing their foreign currency within the app.","description":"Funding of Prepaid Cards from Domiciliary Accounts (USD) Transfer of funds from Prepaid Cards back to the originating domiciliary accounts","hlScope":"TBD","mobileFlows":"TBD","portalScreens":"TBD","apiIntegrations":"TBD","retail":"TBD","otherCountry":"TBD"},{"id":17.0,"feature":"Transaction Receipt new Parameters","changeType":"Bank Request","businessImpact":"Improved Service Access & Customer Experience Customer Retention","release":"S 0.5","businessNeed":"Nice to Have","priority":5,"cbLink":"https://citvericash.atlassian.net/browse/CB-76","jiraLink":"https://citvericash.atlassian.net/browse/UBA-30211","status":"Refinement Done","comment":"Receipt Management","businessDescription":"Transaction Receipt Enhancement improves the layout, parameters, and information displayed on digital receipts after every transaction. Customers get clearer, more complete confirmation of their transactions, reducing confusion and support inquiries related to payment details.","description":"improve the user experience of the transaction receipt","hlScope":"adding new parameters arrangment of parameters add disclaimer","mobileFlows":"1","portalScreens":"No Portal","apiIntegrations":"0","retail":"Yes","otherCountry":"Yes"},{"id":18.0,"feature":"New LifeStyle Food service","changeType":"Bank Request","businessImpact":"Revenue Generation Improved Customer Engagement Customer Retention","release":"","businessNeed":"Essential","priority":1,"cbLink":"https://citvericash.atlassian.net/browse/CB-83","jiraLink":"https://citvericash.atlassian.net/browse/UBA-30205","status":"Analysis InProgress","comment":"Bank asked to Hold","businessDescription":"New Lifestyle Food Service integrates Chowdeck's food ordering platform directly into the Vericash app, allowing customers to browse restaurants, place orders, and pay without leaving the banking app. It increases daily app engagement and positions Vericash as a lifestyle super-app beyond traditional banking.","description":"Allow customers would be able to place food orders on Chowdeck directly through the vericash mobile app.","hlScope":"Same as Trips, HL scope will be shared shortly","mobileFlows":"TBD","portalScreens":"TBD","apiIntegrations":"TBD","retail":"TBD","otherCountry":"TBD"},{"id":19.0,"feature":"Push Notification Exclusion","changeType":"Bank Request","businessImpact":"Improved Customer Engagement Customer Retention","release":"S 1.1","businessNeed":"Nice to Have","priority":5,"cbLink":"https://citvericash.atlassian.net/browse/CB-85","jiraLink":"https://citvericash.atlassian.net/browse/UBA-30206","status":"Refinement Done","comment":"","businessDescription":"Push Notification Exclusion gives customers control over whether they receive push notifications from the app. This reduces notification fatigue, respects customer preferences, and improves overall satisfaction with the app experience.","description":"Allow customer to enable/disable notification receving","hlScope":"add new option to mobile app allow customer enabling/disabling recving of the notification","mobileFlows":"(1-2)","portalScreens":"No Portal","apiIntegrations":"0","retail":"Yes","otherCountry":"Yes"},{"id":20.0,"feature":"Email & Mobile No. Update from the App","changeType":"Bank Request","businessImpact":"Improved Service Access & Customer Experience Customer Retention","release":"S 1.1","businessNeed":"Essential","priority":2,"cbLink":"https://citvericash.atlassian.net/browse/CB-86","jiraLink":"https://citvericash.atlassian.net/browse/UBA-30213","status":"Refinement Done","comment":"","businessDescription":"Email & Mobile Number Update allows customers to change their registered phone number and email address directly through the Vericash app, with proper validation and authentication. It ensures the bank always has accurate contact details without requiring a branch visit.","description":"Allow customer to update phone numbers and email addresses through mobile application","hlScope":"New App UX to let the user update his Mobile No and Email, with Validation and Authintication","mobileFlows":"(2-3)","portalScreens":"","apiIntegrations":"(2-3)","retail":"Yes","otherCountry":"Yes"},{"id":21.0,"feature":"User-Name App Enablement","changeType":"Internal Enabler","businessImpact":"Improved Service Access & Customer Experience Increased Security","release":"S 0.5","businessNeed":"Essential","priority":2,"cbLink":"","jiraLink":"https://citvericash.atlassian.net/browse/UBA-19298","status":"Refinement Done","comment":"","businessDescription":"Username Authentication introduces a personalized login experience by allowing customers to create and use a unique username — instead of an account number — during registration and login. It simplifies access, reduces login errors, and brings the app in line with modern digital banking standards.","description":"implement account Username authentication by creating the username during the registration process and logging into the mobile application using the username","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":22.0,"feature":"Generic Self-Services","changeType":"Internal Enabler","businessImpact":"Operational Efficiency Improved Service Access & Customer Experience","release":"S1.0","businessNeed":"Essential","priority":3,"cbLink":"","jiraLink":"https://citvericash.atlassian.net/browse/UBA-27382","status":"Analysis Done/Migration from Product","comment":"","businessDescription":"Generic Self-Services is an internal platform capability that allows the bank's operations team to add, remove, or configure any self-service feature, screen, or parameter through the portal — without requiring new development. It significantly reduces time-to-market for future service changes.","description":"New component enable Add, remove and configure any Service, screen or parameters of self services","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":23.0,"feature":"AI-Powered Help","changeType":"New Product Feature","businessImpact":"Improved Service Access & Customer Experience Customer Retention","release":"S1.0","businessNeed":"Nice to Have","priority":4,"cbLink":"","jiraLink":"","status":"Analysis Done/Migration from Product","comment":"","businessDescription":"","description":"","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":24.0,"feature":"Rewards Enhancements","changeType":"New Product Feature","businessImpact":"Improved Customer Engagement Customer Retention Revenue Generation","release":"S 0.5","businessNeed":"Essential","priority":2,"cbLink":"","jiraLink":"https://citvericash.atlassian.net/browse/UBA-29653","status":"Refinement Done","comment":"","businessDescription":"Rewards Enhancements adds a manual, portal-based review option for customer rewards alongside the existing automated system. It gives the bank's operations team greater control and flexibility to manage rewards programs, handle exceptions, and ensure fair reward distribution.","description":"Allow rewards-review based form the portal as a second option in addation to automated option","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":25.0,"feature":"Receipt Management","changeType":"Internal Enabler","businessImpact":"Operational Efficiency Improved Service Access & Customer Experience","release":"S 0.5","businessNeed":"Essential","priority":3,"cbLink":"","jiraLink":"https://citvericash.atlassian.net/browse/UBA-29687","status":"Analysis Done/Migration from Product","comment":"","businessDescription":"Receipt Management is a portal-based tool that enables operations teams to configure, restructure, add, or remove transaction receipt templates without code changes. It decouples receipt management from the development cycle and speeds up any future updates to how receipts look and what they contain.","description":"Allow portal management for the receipt to suppor t adding, removing and restrecture the service receipt","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":26.0,"feature":"PFM","changeType":"New Product Feature","businessImpact":"Improved Customer Engagement Customer Retention Improved Service Access & Customer Experience","release":"S 1.1","businessNeed":"Nice to Have","priority":5,"cbLink":"","jiraLink":"https://citvericash.atlassian.net/browse/UBA-29675","status":"Analysis Done/Migration from Product","comment":"","businessDescription":"Personal Financial Management (PFM) is a smart in-app financial tool that helps customers track their spending, set budgets, and analyze their financial patterns over time. It deepens customer engagement with the app and positions UBA as a proactive financial partner, not just a transaction platform.","description":"A smart financial companion that helps users track spending, set budgets, analyse patterns, and make informed decisions to stay in control of their money.","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":27.0,"feature":"Payment Requests/Methods (Pay for me)","changeType":"New Product Feature","businessImpact":"Improved Customer Engagement Revenue Generation Customer Retention","release":"S 1.1","businessNeed":"Nice to Have","priority":5,"cbLink":"","jiraLink":"https://citvericash.atlassian.net/browse/UBA-29912","status":"Analysis Done/Migration from Product","comment":"","businessDescription":"Payment Requests & Methods introduces social and group payment features — including 'Pay for me' requests, money collection from individuals or groups, and bill splitting — with real-time tracking and automated reminders. It brings modern peer-to-peer payment capabilities to UBA customers and drives transaction volume.","description":"A unified payments feature that enables users to send “pay for me” requests, collect money from individuals or groups, and split payments instantly with full tracking and reminders.","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":28.0,"feature":"Marketing Requests (AI upselling / cross selling)","changeType":"New Product Feature","businessImpact":"Revenue Generation Improved Customer Engagement Customer Retention","release":"S1.0","businessNeed":"Nice to Have","priority":5,"cbLink":"","jiraLink":"https://citvericash.atlassian.net/browse/UBA-29895","status":"Analysis Done/Migration from Product","comment":"","businessDescription":"AI-Powered Marketing delivers personalized product recommendations and upselling messages to customers based on their behavior, spending patterns, and financial profile. It enables the bank to surface the right offer to the right customer at the right moment, increasing product uptake and revenue.","description":"A targeted engagement engine that delivers personalized marketing messages and upselling offers based on user behavior, preferences, and financial patterns.","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":29.0,"feature":"Genaric LifeStyle","changeType":"New Product Feature","businessImpact":"Revenue Generation Improved Customer Engagement Customer Retention","release":"S1.0","businessNeed":"Essential","priority":1,"cbLink":"","jiraLink":"https://citvericash.atlassian.net/browse/UBA-29866","status":"Analysis Done/Migration from Product","comment":"","businessDescription":"Generic Lifestyle is a configurable in-app marketplace that aggregates lifestyle services — including event bookings, movie tickets, restaurant reservations, and more — into a single seamless experience. New service partners can be onboarded rapidly through the portal, allowing UBA to continuously expand its non-banking value proposition.","description":"A flexible lifestyle engine that aggregates event bookings, movie tickets, restaurant reservations, and any new partner service into one seamless experience. All services are fully configurable and manageable through the portal, enabling rapid onboarding of new providers.","hlScope":"Complete Scope Exist in the Epic","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":30.0,"feature":"Integrate PayPal APIs into the Vericash Mobile App to enable cross-border and global payments.","changeType":"Bank Request","businessImpact":"Revenue Generation Improved Customer Engagement Customer Retention","release":"S 0.5","businessNeed":"Essential","priority":1,"cbLink":"https://citvericash.atlassian.net/browse/CB-102","jiraLink":"https://citvericash.atlassian.net/browse/UBA-32201","status":"Refinement Done","comment":"","businessDescription":"","description":"","hlScope":"","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":31.0,"feature":"Card Request - Branch and Home delivery","changeType":"Bank Request","businessImpact":"Improved Service Access & Customer Experience Customer Retention","release":"S 1.1","businessNeed":"Nice to Have","priority":5,"cbLink":"https://citvericash.atlassian.net/browse/CB-84","jiraLink":"https://citvericash.atlassian.net/browse/UBA-30214","status":"Refinement Done","comment":"","businessDescription":"","description":"","hlScope":"","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":32.0,"feature":"Home screen UI/UX Revamp","changeType":"Bank Request","businessImpact":"Customer Retention Feature Discovery Brand Perception","release":"S 0.5","businessNeed":"Essential","priority":null,"cbLink":"","jiraLink":"https://citvericash.atlassian.net/browse/UBA-32396","status":"Refinement Done","comment":"","businessDescription":"","description":"","hlScope":"","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":33.0,"feature":"Login for Non-UBA customers","changeType":"Bank Request","businessImpact":"New User Acquisition Competitive Positioning","release":"S1.0","businessNeed":"Essential","priority":null,"cbLink":"","jiraLink":"https://citvericash.atlassian.net/browse/UBA-32655","status":"Refinement Done","comment":"","businessDescription":"","description":"","hlScope":"","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":34.0,"feature":"Bill payment for Non-UBA customers","changeType":"Bank Request","businessImpact":"Revenue Generation","release":"S1.0","businessNeed":"Essential","priority":null,"cbLink":"","jiraLink":"","status":"Analysis InProgress","comment":"","businessDescription":"","description":"","hlScope":"","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":35.0,"feature":"Voluntary Opt-Out/Opt-In Functionality for IP Service","changeType":"Bank Request","businessImpact":"Increased Security","release":"","businessNeed":"Essential","priority":null,"cbLink":"https://citvericash.atlassian.net/browse/CB-111","jiraLink":"https://citvericash.atlassian.net/browse/UBA-36584","status":"Ready for Refinement","comment":"","businessDescription":"","description":"","hlScope":"","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""},{"id":36.0,"feature":"Biometric change security","changeType":"Security enahncement","businessImpact":"Increased Security","release":"","businessNeed":"","priority":null,"cbLink":"","jiraLink":"https://citvericash.atlassian.net/browse/UBA-36270","status":"Ready for Refinement","comment":"","businessDescription":"","description":"","hlScope":"","mobileFlows":"","portalScreens":"","apiIntegrations":"","retail":"","otherCountry":""}];
+var features = JSON.parse(JSON.stringify(FEATURES));
+var nextId=38, sortCol="id", sortDir=1, editId=null;
+
+// ── CONFIG LISTS ──────────────────────────────────────────────────────────────
+var CFG = {
+  status:       {label:"Status",         icon:"🔄",color:"#4da6ff",desc:"Workflow statuses",           items:[{v:"Refinement Done",color:"#00c896"},{v:"Analysis Done",color:"#4da6ff"},{v:"Analysis Done/Migration from Product",color:"#4da6ff"},{v:"Analysis InProgress",color:"#f5a623"},{v:"Ready for Refinement",color:"#b085ff"}]},
+  priority:     {label:"Priority",        icon:"🎯",color:"#f5a623",desc:"Business priority levels",    items:[{v:"1",lbl:"P1 – Highest",color:"#E8002D"},{v:"2",lbl:"P2",color:"#f5a623"},{v:"3",lbl:"P3",color:"#4da6ff"},{v:"4",lbl:"P4",color:"#b085ff"},{v:"5",lbl:"P5 – Lowest",color:"#888"}]},
+  changeType:   {label:"Change Type",     icon:"🏷", color:"#b085ff",desc:"Feature change categories",  items:[{v:"Bank Request",color:"#E8002D"},{v:"Internal Enabler",color:"#4da6ff"},{v:"New Product Feature",color:"#b085ff"},{v:"Security enhancement",color:"#00c896"}]},
+  businessNeed: {label:"Business Need",   icon:"💡",color:"#00c896",desc:"Business value classification",items:[{v:"Essential",color:"#00c896"},{v:"Nice to Have",color:"#f5a623"}]},
+  release:      {label:"Release / Sprint",icon:"🚀",color:"#ff7849",desc:"Release milestones",          items:[{v:"S 0.5",color:"#f5a623"},{v:"S1.0",color:"#4da6ff"},{v:"S 1.1",color:"#00c896"}]},
+  retail:       {label:"Retail / SME",    icon:"🏦",color:"#4da6ff",desc:"Target market segments",      items:[{v:"Retail only",color:"#4da6ff"},{v:"Retail & SME",color:"#b085ff"},{v:"Yes",color:"#00c896"},{v:"TBD",color:"#888"}]},
+  otherCountry: {label:"Other Country",   icon:"🌍",color:"#00c896",desc:"Multi-country rollout flag",   items:[{v:"No",color:"#888"},{v:"Yes",color:"#00c896"},{v:"TBD",color:"#f5a623"}]},
+  businessImpact:{label:"Business Impact",icon:"📊",color:"#ff7849",desc:"Business impact categories",  items:[{v:"Revenue Generation",color:"#00c896"},{v:"Customer Retention",color:"#4da6ff"},{v:"Improved Service Access & Customer Experience",color:"#b085ff"},{v:"Increased Security",color:"#E8002D"},{v:"Operational Efficiency",color:"#f5a623"},{v:"Risk Reduction",color:"#ff7849"},{v:"Improved Customer Engagement",color:"#4da6ff"},{v:"New User Acquisition",color:"#00c896"},{v:"Competitive Positioning",color:"#b085ff"},{v:"Support Cost Reduction",color:"#f5a623"},{v:"Data Quality & Analytics",color:"#888"},{v:"Feature Discovery",color:"#4da6ff"},{v:"Brand Perception",color:"#b085ff"}]}
+};
+var activeCfgKey=null;
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function sBadge(s){
+  if(!s) return '<span class="dash">—</span>';
+  var sl=s.toLowerCase();
+  if(sl.indexOf("refinement done")>=0) return '<span class="b brd">Refinement Done</span>';
+  if(sl.indexOf("migration")>=0)       return '<span class="b bad">Analysis Done / Migration</span>';
+  if(sl.indexOf("analysis done")>=0)   return '<span class="b bad">Analysis Done</span>';
+  if(sl.indexOf("analysis in")>=0)     return '<span class="b bai">Analysis InProgress</span>';
+  if(sl.indexOf("ready")>=0)           return '<span class="b brf">Ready for Refinement</span>';
+  return '<span class="b bot">'+esc(s)+"</span>";
+}
+function nBadge(n){if(!n)return"";return n==="Essential"?'<span class="b bes">Essential</span>':'<span class="b bni">Nice to Have</span>';}
+function tBadge(t){
+  if(!t)return"";
+  var m={"Bank Request":"bbr","Internal Enabler":"bin","New Product Feature":"bpr","Security enhancement":"bse","Security enahncement":"bse"};
+  return'<span class="b '+(m[t]||"bot")+'">'+esc(t)+"</span>";
+}
+function pBadge(p){if(!p&&p!==0)return'<span class="dash">—</span>';return'<span class="prio p'+p+'">'+p+"</span>";}
+function rBadge(r){
+  if(!r)return'<span class="dash">—</span>';
+  var c={"S 0.5":"#f5a623","S1.0":"#4da6ff","S 1.1":"#00c896"}[r]||"#888";
+  return'<span class="b" style="background:'+c+'22;color:'+c+'">'+esc(r)+"</span>";
+}
+function impactTags(imp){
+  if(!imp)return'<span class="dash">—</span>';
+  return imp.split("|").map(function(t){return'<span class="impact-tag">'+esc(t.trim())+"</span>";}).join("");
+}
+function mkLink(url,label){if(!url)return"";return'<a href="'+url+'" target="_blank" class="lnk">'+label+"</a>";}
+function toast(msg,type){var c=document.getElementById("toasts"),t=document.createElement("div");t.className="toast "+(type||"ok");t.textContent=(type==="err"?"⚠ ":"✓ ")+msg;c.appendChild(t);setTimeout(function(){t.remove();},3200);}
+function closeMod(id){document.getElementById(id).classList.remove("open");}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function showTab(name){
+  document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("active");});
+  document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("active");});
+  var panel=document.getElementById("tab-"+name);
+  if(panel) panel.classList.add("active");
+  var names=["overview","table","kanban","analytics","import","config"];
+  var idx=names.indexOf(name);
+  var allTabs=document.querySelectorAll(".tab");
+  if(idx>=0&&allTabs[idx]) allTabs[idx].classList.add("active");
+  if(name==="overview") renderOverview();
+  if(name==="table") renderTable();
+  if(name==="kanban") renderKanban();
+  if(name==="analytics") renderAnalytics();
+  if(name==="config") renderCfgSidebar();
+}
+
+// ── OVERVIEW ─────────────────────────────────────────────────────────────────
+function renderOverview(){
+  var total=features.length;
+  var ess=features.filter(function(f){return f.businessNeed==="Essential";}).length;
+  var p1=features.filter(function(f){return f.priority===1;}).length;
+  var bank=features.filter(function(f){return f.changeType==="Bank Request";}).length;
+  var s05=features.filter(function(f){return f.release==="S 0.5";}).length;
+  var s10=features.filter(function(f){return f.release==="S1.0";}).length;
+  var s11=features.filter(function(f){return f.release==="S 1.1";}).length;
+  // Status counts — based on exact status values only
+  var statusCounts={};
+  features.forEach(function(f){var s=f.status||"";statusCounts[s]=(statusCounts[s]||0)+1;});
+  var refDone   = statusCounts["Refinement Done"]||0;
+  var anaDone   = statusCounts["Analysis Done/Migration from Product"]||0;
+  var anaInProg = statusCounts["Analysis InProgress"]||0;
+  var readyRef  = statusCounts["Ready for Refinement"]||0;
+  var stats=[
+    {l:"Total Features",              v:total,     s:"across all types",          c:"#E8002D"},
+    {l:"Essential",                   v:ess,        s:Math.round(ess/total*100)+"% of scope", c:"#00c896"},
+    {l:"Priority 1",                  v:p1,         s:"highest priority",          c:"#f5a623"},
+    {l:"Bank Requests",               v:bank,       s:"client-driven",             c:"#b085ff"},
+    {l:"Refinement Done",             v:refDone,    s:"ready for development",     c:"#00c896"},
+    {l:"Analysis Done / Migration",   v:anaDone,    s:"migrated from product",     c:"#4da6ff"},
+    {l:"Analysis InProgress",         v:anaInProg,  s:"actively being analysed",   c:"#f5a623"},
+    {l:"Ready for Refinement",        v:readyRef,   s:"awaiting refinement",        c:"#b085ff"},
+    {l:"Release S 0.5",               v:s05,        s:"sprint 0.5",                c:"#f5a623"},
+    {l:"Release S1.0",                v:s10,        s:"sprint 1.0",                c:"#4da6ff"},
+    {l:"Release S 1.1",               v:s11,        s:"sprint 1.1",                c:"#00c896"}
+  ];
+  document.getElementById("stat-grid").innerHTML=stats.map(function(s){
+    return'<div class="sc" style="--c:'+s.c+'"><div class="sl">'+s.l+'</div><div class="sv">'+s.v+'</div><div class="ss">'+s.s+"</div></div>";
+  }).join("");
+  var sm={},tm={},rm={},im={};
+  features.forEach(function(f){
+    var sv=f.status||"Unknown"; sm[sv]=(sm[sv]||0)+1;
+    var tv=f.changeType||"Unknown"; tm[tv]=(tm[tv]||0)+1;
+    var rv=f.release||"No Release"; rm[rv]=(rm[rv]||0)+1;
+    if(f.businessImpact){f.businessImpact.split("|").forEach(function(tag){var t=tag.trim();if(t){im[t]=(im[t]||0)+1;}});}
+  });
+  bars("ch-status", sm,["#00c896","#4da6ff","#f5a623","#b085ff","#E8002D","#888"]);
+  bars("ch-type",   tm,["#E8002D","#4da6ff","#b085ff","#00c896"]);
+  bars("ch-release",rm,["#f5a623","#4da6ff","#00c896","#888"]);
+  bars("ch-impact", im,["#00c896","#4da6ff","#f5a623","#b085ff","#E8002D","#ff7849","#888"]);
+}
+function bars(id,data,colors){
+  var sorted=Object.entries(data).sort(function(a,b){return b[1]-a[1];});
+  var max=Math.max.apply(null,sorted.map(function(x){return x[1];}));
+  document.getElementById(id).innerHTML=sorted.map(function(kv,i){
+    return'<div class="bar-row"><div class="blbl" title="'+esc(kv[0])+'">'+esc(kv[0])+'</div><div class="btrk"><div class="bfil" style="width:'+Math.round(kv[1]/max*100)+'%;background:'+colors[i%colors.length]+'"></div></div><div class="bnum">'+kv[1]+"</div></div>";
+  }).join("");
+}
+
+// ── TABLE ────────────────────────────────────────────────────────────────────
+function populateFilters(){
+  function fOpts(key,elId,label,useLabel){
+    var el=document.getElementById(elId); if(!el||!CFG[key])return;
+    var cur=el.value,o='<option value="">All '+label+'</option>';
+    CFG[key].items.forEach(function(item){o+='<option value="'+esc(item.v)+'">'+esc(useLabel&&item.lbl?item.lbl:item.v)+"</option>";});
+    o+='<option value="__blank__">— Blank —</option>';
+    el.innerHTML=o; el.value=cur;
+  }
+  fOpts("status","fs","Statuses",false); fOpts("changeType","ft","Types",false);
+  fOpts("businessNeed","fn","Needs",false); fOpts("release","fr","Releases",false);
+  fOpts("priority","fp","Priorities",true);
+  // Business impact filter - build from data
+  var el=document.getElementById("fi2"); if(!el)return;
+  var cur=el.value, impacts={};
+  features.forEach(function(f){if(f.businessImpact){f.businessImpact.split("|").forEach(function(t){var tt=t.trim();if(tt)impacts[tt]=1;});}});
+  var o='<option value="">All Impact Types</option>';
+  Object.keys(impacts).sort().forEach(function(t){o+='<option value="'+esc(t)+'">'+esc(t)+"</option>";});
+  o+='<option value="__blank__">— Blank —</option>';
+  el.innerHTML=o; el.value=cur;
+}
+function populateFormDropdowns(){
+  function opts(key,allowEmpty,useLabel){
+    var list=CFG[key]; if(!list)return"";
+    var o=allowEmpty?'<option value="">—</option>':"";
+    list.items.forEach(function(item){o+='<option value="'+esc(item.v)+'">'+esc(useLabel&&item.lbl?item.lbl:item.v)+"</option>";});
+    return o;
+  }
+  document.getElementById("fi-type").innerHTML=opts("changeType",false,false);
+  document.getElementById("fi-need").innerHTML=opts("businessNeed",false,false);
+  document.getElementById("fi-rel").innerHTML=opts("release",true,false);
+  document.getElementById("fi-pri").innerHTML=opts("priority",true,true);
+  document.getElementById("fi-sta").innerHTML=opts("status",false,false);
+  document.getElementById("fi-ret").innerHTML=opts("retail",true,false);
+  document.getElementById("fi-oc").innerHTML=opts("otherCountry",true,false);
+}
+function syncDropdowns(){populateFilters();populateFormDropdowns();}
+
+function isBlank(val){return !val && val!==0;}
+function matchFilter(filterVal, featureVal){
+  if(!filterVal) return true;
+  if(filterVal==="__blank__") return isBlank(featureVal);
+  return String(featureVal||"")===filterVal;
+}
+function getFiltered(){
+  var q=(document.getElementById("fq").value||"").toLowerCase();
+  var fn=document.getElementById("fn").value;
+  var ft=document.getElementById("ft").value;
+  var fs=document.getElementById("fs").value;
+  var fr=document.getElementById("fr").value;
+  var fp=document.getElementById("fp").value;
+  var fi2=document.getElementById("fi2").value;
+  return features.filter(function(f){
+    if(q&&(f.feature||"").toLowerCase().indexOf(q)<0&&(f.description||"").toLowerCase().indexOf(q)<0&&(f.status||"").toLowerCase().indexOf(q)<0&&(f.businessImpact||"").toLowerCase().indexOf(q)<0&&(f.businessDescription||"").toLowerCase().indexOf(q)<0)return false;
+    if(!matchFilter(fn, f.businessNeed))return false;
+    if(!matchFilter(ft, f.changeType))return false;
+    if(!matchFilter(fs, f.status))return false;
+    if(!matchFilter(fr, f.release))return false;
+    if(fp){
+      if(fp==="__blank__"){if(!isBlank(f.priority))return false;}
+      else if(String(f.priority||"")!==fp)return false;
+    }
+    if(fi2){
+      if(fi2==="__blank__"){if(!isBlank(f.businessImpact))return false;}
+      else if((f.businessImpact||"").indexOf(fi2)<0)return false;
+    }
+    return true;
+  }).sort(function(a,b){
+    var av=a[sortCol],bv=b[sortCol];
+    if(av==null)av=sortDir>0?1e9:-1e9;
+    if(bv==null)bv=sortDir>0?1e9:-1e9;
+    if(typeof av==="number")return(av-bv)*sortDir;
+    return String(av).localeCompare(String(bv))*sortDir;
+  });
+}
+function renderTable(){
+  var rows=getFiltered();
+  document.getElementById("tcnt").textContent=rows.length+" of "+features.length;
+  var body=document.getElementById("tbody");
+  if(!rows.length){body.innerHTML='<tr><td colspan="13"><div class="empty-s">No features match your filters.</div></td></tr>';return;}
+  body.innerHTML=rows.map(function(f){
+    return"<tr>"+
+      "<td><code>"+f.id+"</code></td>"+
+      '<td style="max-width:180px;font-weight:600;cursor:pointer" onclick="openDetail('+f.id+')">'+esc(f.feature)+"</td>"+
+      "<td>"+tBadge(f.changeType)+"</td>"+
+      "<td>"+nBadge(f.businessNeed)+"</td>"+
+      "<td>"+rBadge(f.release)+"</td>"+
+      '<td style="text-align:center">'+pBadge(f.priority)+"</td>"+
+      "<td>"+sBadge(f.status)+"</td>"+
+      '<td style="max-width:200px">'+impactTags(f.businessImpact)+"</td>"+
+      "<td><span style='font-size:12px'>"+esc(f.retail||"—")+"</span></td>"+
+      "<td><code>"+esc(f.mobileFlows||"—")+"</code></td>"+
+      "<td><code>"+esc(f.apiIntegrations||"—")+"</code></td>"+
+      "<td style='white-space:nowrap'>"+mkLink(f.cbLink,"CB")+" "+mkLink(f.jiraLink,"Jira")+"</td>"+
+      "<td><div class='acts'>"+
+        "<button class='act' onclick='openDetail("+f.id+")'>👁</button>"+
+        "<button class='act' onclick='openEdit("+f.id+")'>✏</button>"+
+        "<button class='act' onclick='delFeat("+f.id+")'>🗑</button>"+
+      "</div></td></tr>";
+  }).join("");
+}
+function srt(col){if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}renderTable();}
+function clearF(){
+  document.getElementById("fq").value="";
+  ["fn","ft","fs","fr","fp","fi2"].forEach(function(id){document.getElementById(id).value="";});
+  renderTable();
+}
+
+// ── KANBAN ───────────────────────────────────────────────────────────────────
+var KCOLS=[
+  {key:"refinement",label:"Refinement Done",    color:"#00c896",status:"Refinement Done"},
+  {key:"analysis",  label:"Analysis Done",       color:"#4da6ff",status:"Analysis Done"},
+  {key:"inprogress",label:"Analysis InProgress", color:"#f5a623",status:"Analysis InProgress"},
+  {key:"ready",     label:"Ready for Refinement",color:"#b085ff",status:"Ready for Refinement"}
+];
+function getKCol(f){
+  if(f._col)return f._col;
+  var s=(f.status||"").toLowerCase();
+  if(s.indexOf("refinement done")>=0)return"refinement";
+  if(s.indexOf("analysis done")>=0)return"analysis";
+  if(s.indexOf("analysis in")>=0)return"inprogress";
+  if(s.indexOf("ready")>=0)return"ready";
+  return"refinement";
+}
+var dragId=null,kph=null;
+function renderKanban(){
+  features.forEach(function(f){if(!f._col)f._col=getKCol(f);});
+  var board=document.getElementById("kboard"); board.innerHTML="";
+  KCOLS.forEach(function(col){
+    var el=document.createElement("div");el.className="kcol";el.dataset.col=col.key;
+    var items=features.filter(function(f){return f._col===col.key;});
+    var head=document.createElement("div");head.className="khead";head.style.color=col.color;
+    head.innerHTML="<span>"+col.label+"</span><span class='kcnt'>"+items.length+"</span>";
+    el.appendChild(head);
+    el.addEventListener("dragover",function(e){
+      e.preventDefault();el.classList.add("over");
+      if(!kph){kph=document.createElement("div");kph.className="kph";}
+      var after=dragAfter(el,e.clientY);
+      if(after)el.insertBefore(kph,after);else el.appendChild(kph);
+    });
+    el.addEventListener("dragleave",function(e){if(!el.contains(e.relatedTarget))el.classList.remove("over");});
+    el.addEventListener("drop",function(e){
+      e.preventDefault();el.classList.remove("over");
+      if(kph&&kph.parentNode)kph.parentNode.removeChild(kph);kph=null;
+      if(dragId==null)return;
+      var f=features.find(function(x){return x.id==dragId;});
+      if(!f||f._col===col.key){dragId=null;return;}
+      f._col=col.key;f.status=col.status;dragId=null;
+      renderKanban();renderOverview();toast("Moved to: "+col.label);
+    });
+    if(items.length){
+      items.forEach(function(f){
+        var card=document.createElement("div");card.className="kcard";card.draggable=true;
+        card.innerHTML="<div class='khandle'>⠿</div><div class='ktitle'>"+esc(f.feature)+"</div><div class='kmeta'>"+(f.priority?"<span class='prio p"+f.priority+"' style='width:18px;height:18px;font-size:10px'>"+f.priority+"</span>":"")+nBadge(f.businessNeed)+" "+rBadge(f.release)+"</div>";
+        card.addEventListener("dragstart",function(e){dragId=f.id;e.dataTransfer.effectAllowed="move";card.classList.add("dragging");});
+        card.addEventListener("dragend",function(){card.classList.remove("dragging");dragId=null;if(kph&&kph.parentNode)kph.parentNode.removeChild(kph);kph=null;document.querySelectorAll(".kcol").forEach(function(c){c.classList.remove("over");});});
+        card.addEventListener("click",function(){openDetail(f.id);});
+        el.appendChild(card);
+      });
+    }else{var em=document.createElement("div");em.className="kempty";em.textContent="Drop cards here";el.appendChild(em);}
+    board.appendChild(el);
+  });
+}
+function dragAfter(container,y){
+  var cards=Array.from(container.querySelectorAll(".kcard:not(.dragging)"));
+  return cards.reduce(function(cl,child){
+    var box=child.getBoundingClientRect(),offset=y-box.top-box.height/2;
+    if(offset<0&&offset>(cl.offset||-1e9))return{offset:offset,el:child};
+    return cl;
+  },{}).el;
+}
+
+// ── ANALYTICS ────────────────────────────────────────────────────────────────
+function renderAnalytics(){
+  var fd={},ad={};
+  features.forEach(function(f){
+    if(f.mobileFlows&&f.mobileFlows!=="TBD"&&f.mobileFlows!=="")fd[f.feature]=f.mobileFlows;
+    var n=parseFloat(f.apiIntegrations);if(!isNaN(n)&&n>0)ad[f.feature]=n;
+  });
+  var clrs=["#4da6ff","#00c896","#f5a623","#b085ff","#E8002D"];
+  document.getElementById("ch-flows").innerHTML=Object.keys(fd).length?Object.entries(fd).map(function(kv,i){return'<div class="bar-row"><div class="blbl" title="'+esc(kv[0])+'">'+esc(kv[0])+'</div><div class="btrk"><div class="bfil" style="width:80%;background:'+clrs[i%clrs.length]+'"></div></div><div class="bnum">'+esc(kv[1])+"</div></div>";}).join(""):'<div class="empty-s">No quantified data</div>';
+  var mxa=Math.max.apply(null,Object.values(ad).concat([1]));
+  document.getElementById("ch-apis").innerHTML=Object.keys(ad).length?Object.entries(ad).map(function(kv,i){return'<div class="bar-row"><div class="blbl" title="'+esc(kv[0])+'">'+esc(kv[0])+'</div><div class="btrk"><div class="bfil" style="width:'+Math.round(kv[1]/mxa*100)+'%;background:#E8002D"></div></div><div class="bnum">'+kv[1]+"</div></div>";}).join(""):'<div class="empty-s">No API data</div>';
+  document.getElementById("sbody").innerHTML=features.map(function(f){
+    return"<tr><td><code>"+f.id+"</code></td><td style='font-weight:600;cursor:pointer;max-width:190px' onclick='openDetail("+f.id+")'>"+esc(f.feature)+"</td><td>"+rBadge(f.release)+"</td><td>"+sBadge(f.status)+"</td><td><code>"+esc(f.mobileFlows||"—")+"</code></td><td><code>"+esc(f.portalScreens||"—")+"</code></td><td><code>"+esc(f.apiIntegrations||"—")+"</code></td><td>"+esc(f.retail||"—")+"</td><td>"+esc(f.otherCountry||"—")+"</td></tr>";
+  }).join("");
+}
+
+// ── DETAIL ───────────────────────────────────────────────────────────────────
+function openDetail(id){
+  var f=features.find(function(x){return x.id==id;});if(!f)return;
+  var h='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;padding-right:30px">'+
+    '<div><div style="font-size:18px;font-weight:800;margin-bottom:8px">'+esc(f.feature)+'</div>'+
+    '<div style="display:flex;gap:7px;flex-wrap:wrap">'+tBadge(f.changeType)+nBadge(f.businessNeed)+rBadge(f.release)+(f.priority?'<span class="b bot">P'+f.priority+"</span>":"")+"</div></div>"+
+    '<button class="btn" onclick="openEdit('+f.id+');closeMod(\'mod-det\')">✏ Edit</button></div>';
+  h+='<div class="ds"><div class="dst">Status</div>'+sBadge(f.status)+(f.comment?'<span style="margin-left:10px;font-size:12px;color:#f5a623">'+esc(f.comment)+"</span>":"")+"</div>";
+  if(f.businessImpact) h+='<div class="ds"><div class="dst">Business Impact</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">'+impactTags(f.businessImpact)+"</div></div>";
+  if(f.businessDescription) h+='<div class="ds"><div class="dst">Business Description</div><div style="font-size:13px;line-height:1.75;color:var(--txt);background:rgba(232,0,45,.04);border:1px solid rgba(232,0,45,.15);border-radius:9px;padding:14px">'+esc(f.businessDescription)+"</div></div>";
+  if(f.description) h+='<div class="ds"><div class="dst">Description</div><div style="font-size:13px;line-height:1.7;color:var(--mut)">'+esc(f.description)+"</div></div>";
+  if(f.hlScope) h+='<div class="ds"><div class="dst">HL Scope</div><div style="font-size:13px;line-height:1.7;background:var(--s2);border-radius:8px;padding:12px;border:1px solid var(--brd)">'+esc(f.hlScope)+"</div></div>";
+  h+='<div class="ds"><div class="dst">Scope Metrics</div><div class="dgrid">'+
+    '<div><div class="dk">Mobile Flows</div><div class="dv"><code>'+esc(f.mobileFlows||"—")+"</code></div></div>"+
+    '<div><div class="dk">Portal Screens</div><div class="dv"><code>'+esc(f.portalScreens||"—")+"</code></div></div>"+
+    '<div><div class="dk">API Integrations</div><div class="dv"><code>'+esc(f.apiIntegrations||"—")+"</code></div></div>"+
+    '<div><div class="dk">Retail / SME</div><div class="dv">'+esc(f.retail||"—")+"</div></div>"+
+    '<div><div class="dk">Other Country</div><div class="dv">'+esc(f.otherCountry||"—")+"</div></div>"+
+    "</div></div>";
+  h+='<div class="ds"><div class="dst">Links</div><div style="display:flex;gap:10px">'+
+    (f.cbLink?'<a href="'+f.cbLink+'" target="_blank" class="btn">🔗 CB Link</a>':"")+
+    (f.jiraLink?'<a href="'+f.jiraLink+'" target="_blank" class="btn">🔗 Jira Epic</a>':"")+
+    "</div></div>";
+  document.getElementById("det-body").innerHTML=h;
+  document.getElementById("mod-det").classList.add("open");
+}
+
+// ── ADD / EDIT ────────────────────────────────────────────────────────────────
+function openAdd(){
+  editId=null;
+  document.getElementById("form-ttl").textContent="Add Feature";
+  ["fi-name","fi-fl","fi-api","fi-cb","fi-ji","fi-com","fi-bd","fi-desc","fi-hl","fi-bi"].forEach(function(id){document.getElementById(id).value="";});
+  populateFormDropdowns();
+  document.getElementById("fi-rel").value="";document.getElementById("fi-pri").value="";
+  document.getElementById("mod-form").classList.add("open");
+}
+function openEdit(id){
+  var f=features.find(function(x){return x.id==id;});if(!f)return;
+  editId=f.id;
+  document.getElementById("form-ttl").textContent="Edit Feature";
+  populateFormDropdowns();
+  document.getElementById("fi-name").value=f.feature||"";
+  document.getElementById("fi-type").value=f.changeType||"";
+  document.getElementById("fi-need").value=f.businessNeed||"";
+  document.getElementById("fi-rel").value=f.release||"";
+  document.getElementById("fi-pri").value=f.priority!=null?String(f.priority):"";
+  document.getElementById("fi-sta").value=f.status||"";
+  document.getElementById("fi-ret").value=f.retail||"";
+  document.getElementById("fi-oc").value=f.otherCountry||"";
+  document.getElementById("fi-fl").value=f.mobileFlows||"";
+  document.getElementById("fi-api").value=f.apiIntegrations||"";
+  document.getElementById("fi-cb").value=f.cbLink||"";
+  document.getElementById("fi-ji").value=f.jiraLink||"";
+  document.getElementById("fi-bi").value=f.businessImpact||"";
+  document.getElementById("fi-com").value=f.comment||"";
+  document.getElementById("fi-bd").value=f.businessDescription||"";
+  document.getElementById("fi-desc").value=f.description||"";
+  document.getElementById("fi-hl").value=f.hlScope||"";
+  document.getElementById("mod-form").classList.add("open");
+}
+function saveFeat(){
+  var name=document.getElementById("fi-name").value.trim();
+  if(!name){toast("Feature name required","err");return;}
+  var pv=document.getElementById("fi-pri").value;
+  var data={feature:name,changeType:document.getElementById("fi-type").value,businessNeed:document.getElementById("fi-need").value,release:document.getElementById("fi-rel").value,priority:pv?parseInt(pv):null,status:document.getElementById("fi-sta").value,retail:document.getElementById("fi-ret").value,otherCountry:document.getElementById("fi-oc").value,mobileFlows:document.getElementById("fi-fl").value.trim(),apiIntegrations:document.getElementById("fi-api").value.trim(),cbLink:document.getElementById("fi-cb").value.trim(),jiraLink:document.getElementById("fi-ji").value.trim(),businessImpact:document.getElementById("fi-bi").value.trim(),comment:document.getElementById("fi-com").value.trim(),businessDescription:document.getElementById("fi-bd").value.trim(),description:document.getElementById("fi-desc").value.trim(),hlScope:document.getElementById("fi-hl").value.trim()};
+  if(editId!=null){
+    var idx=features.findIndex(function(f){return f.id==editId;});
+    if(idx===-1){toast("Feature not found","err");return;}
+    data._col=null;
+    features[idx]=Object.assign({},features[idx],data);
+    toast("Feature updated");
+  } else {
+    data.id=nextId++;data._col=null;features.push(data);toast("Feature added");
+    dbSaveNew(data);
+  }
+  closeMod("mod-form");renderTable();renderOverview();
+}
+function delFeat(id){if(!confirm("Delete this feature?"))return;features=features.filter(function(f){return String(f.id)!==String(id);});dbDelFeature(id);renderTable();renderOverview();toast("Deleted");}
+
+// ── MODALS ────────────────────────────────────────────────────────────────────
+document.querySelectorAll(".overlay").forEach(function(o){
+  o.addEventListener("click",function(e){if(e.target===o)o.classList.remove("open");});
+});
+
+// ── IMPORT / EXPORT ───────────────────────────────────────────────────────────
+var dz=document.getElementById("dropz");
+dz.addEventListener("dragover",function(e){e.preventDefault();dz.classList.add("over");});
+dz.addEventListener("dragleave",function(){dz.classList.remove("over");});
+dz.addEventListener("drop",function(e){e.preventDefault();dz.classList.remove("over");handleImport({target:{files:e.dataTransfer.files}});});
+function handleImport(evt){var file=evt.target.files[0];if(!file)return;var r=new FileReader();r.onload=function(e){importCSV(e.target.result);};r.readAsText(file);}
+function importCSV(text){
+  var lines=text.split("\n").filter(function(l){return l.trim();});
+  var headers=lines[0].split(",").map(function(h){return h.replace(/"/g,"").trim().toLowerCase();});
+  var added=0;
+  for(var i=1;i<lines.length;i++){
+    var vals=lines[i].match(/(".*?"|[^,]+)/g)||[];
+    var obj={};headers.forEach(function(h,idx){obj[h]=(vals[idx]||"").replace(/^"|"$/g,"").trim();});
+    if(obj.feature){features.push({id:nextId++,feature:obj.feature,changeType:obj["change type"]||"Bank Request",businessNeed:obj["business need"]||"",release:obj.release||"",priority:parseInt(obj.priority)||null,status:obj.status||"",businessImpact:obj["business impact"]||"",comment:obj.comment||"",businessDescription:obj["business description"]||"",description:obj.description||"",hlScope:obj["hl scope"]||"",mobileFlows:obj["mobile flows"]||"",portalScreens:obj["portal screens"]||"",apiIntegrations:obj["api integrations"]||"",retail:obj.retail||"",otherCountry:obj["other country"]||"",cbLink:obj["cb link"]||"",jiraLink:obj["jira link"]||"",_col:null});added++;}
+  }
+  toast("Imported "+added+" features");renderOverview();renderTable();
+}
+function exportCSV(){
+  var cols=["id","feature","changeType","businessNeed","release","priority","status","businessImpact","comment","businessDescription","description","hlScope","mobileFlows","portalScreens","apiIntegrations","retail","otherCountry","cbLink","jiraLink"];
+  var hdrs=["#","Feature","Change Type","Business Need","Release","Priority","Status","Business Impact","Comment","Business Description","Description","HL Scope","Mobile Flows","Portal Screens","API Integrations","Retail/SME","Other Country","CB Link","Jira Link"];
+  var rows=features.map(function(f){return cols.map(function(c){return'"'+String(f[c]||"").replace(/"/g,'""')+'"';}).join(",");});
+  dl("Vericash_Features.csv",[hdrs.join(",")].concat(rows).join("\n"),"text/csv");toast("CSV exported");
+}
+function exportJSON(){dl("Vericash_Features.json",JSON.stringify(features,null,2),"application/json");toast("JSON exported");}
+function exportMD(){
+  var lines=["# Vericash Features Tracker","","| # | Feature | Type | Need | Release | Priority | Status | Business Impact |","|---|---------|------|------|---------|----------|--------|-----------------|"];
+  features.forEach(function(f){lines.push("| "+f.id+" | "+f.feature+" | "+(f.changeType||"")+" | "+(f.businessNeed||"")+" | "+(f.release||"")+" | "+(f.priority||"")+" | "+(f.status||"")+" | "+(f.businessImpact||"")+" |");});
+  dl("Vericash_Features.md",lines.join("\n"),"text/markdown");toast("Markdown exported");
+}
+function dlTpl(){dl("Vericash_Template.csv","#,Feature,Change Type,Business Need,Release,Priority,Status,Business Impact,Comment,Business Description,Description,HL Scope,Mobile Flows,Portal Screens,API Integrations,Retail/SME,Other Country,CB Link,Jira Link\n","text/csv");toast("Template downloaded");}
+function dl(name,content,type){var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([content],{type:type}));a.download=name;a.click();}
+
+// ── CONFIG ───────────────────────────────────────────────────────────────────
+function renderCfgSidebar(){
+  document.getElementById("cfg-sb").innerHTML=Object.keys(CFG).map(function(key){
+    var list=CFG[key];
+    return'<div class="cfg-si'+(activeCfgKey===key?" active":"")+'" onclick="openCfgList(\''+key+'\')">'+
+      '<div class="cfg-ico" style="background:'+list.color+'22;color:'+list.color+'">'+list.icon+'</div>'+
+      '<div><div style="font-weight:600">'+list.label+'</div><div style="font-size:11px;color:var(--mut)">'+list.items.length+' values</div></div></div>';
+  }).join("");
+}
+function openCfgList(key){activeCfgKey=key;renderCfgSidebar();renderCfgEditor();}
+function renderCfgEditor(){
+  var key=activeCfgKey;if(!key||!CFG[key])return;
+  var list=CFG[key];var isPrio=(key==="priority");
+  var itemsHtml=list.items.map(function(item,idx){
+    var display=item.lbl||item.v;
+    return'<div class="cfg-row" id="cfgrow-'+key+'-'+idx+'">'+
+      '<div style="width:12px;height:12px;border-radius:50%;background:'+item.color+';flex-shrink:0"></div>'+
+      '<div class="cfg-rl">'+esc(display)+(item.lbl?'<span style="color:var(--mut);font-size:11px;margin-left:8px">key: '+esc(item.v)+"</span>":"")+'</div>'+
+      '<div style="font-size:11px;color:var(--mut);margin-right:8px">'+item.color+'</div>'+
+      '<button class="cedit" onclick="editCfgItem(\''+key+'\','+idx+')">✏ Edit</button>'+
+      '<button class="cdel" onclick="delCfgItem(\''+key+'\','+idx+')">✕</button></div>';
+  }).join("");
+  var addHtml='<div class="cfg-add">'+
+    '<div style="display:flex;flex-direction:column;gap:4px;flex:1"><div class="flabel">'+(isPrio?"Display Label":"Value")+'</div><input class="fi" id="cfg-nv" placeholder="'+(isPrio?"e.g. P6 – Critical":"e.g. New Value")+'"></div>'+
+    (isPrio?'<div style="display:flex;flex-direction:column;gap:4px;width:80px"><div class="flabel">Key</div><input class="fi" id="cfg-nk" placeholder="e.g. 6"></div>':"")+
+    '<div style="display:flex;flex-direction:column;gap:4px"><div class="flabel">Color</div><input type="color" class="colpick" id="cfg-nc" value="#4da6ff"></div>'+
+    '<button class="btn red" style="align-self:flex-end" onclick="addCfgItem(\''+key+'\')">＋ Add</button></div>';
+  document.getElementById("cfg-ed").innerHTML=
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">'+
+    '<div><div style="font-size:16px;font-weight:800;margin-bottom:4px">'+list.icon+' '+list.label+'</div><div style="font-size:12px;color:var(--mut)">'+list.desc+'</div></div>'+
+    '<span class="b bot">'+list.items.length+' values</span></div>'+
+    '<div id="cfg-items">'+(itemsHtml||'<div class="empty-s" style="padding:24px">No values yet</div>')+'</div>'+
+    addHtml+
+    '<div style="margin-top:14px;padding:11px;background:rgba(232,0,45,.05);border:1px solid rgba(232,0,45,.15);border-radius:9px;font-size:12px;color:var(--mut)">💡 Changes apply instantly to all dropdowns and filters across the dashboard.</div>';
+}
+function addCfgItem(key){
+  var nv=document.getElementById("cfg-nv").value.trim();
+  if(!nv){toast("Value is required","err");return;}
+  var nk=document.getElementById("cfg-nk"),nc=document.getElementById("cfg-nc");
+  var keyVal=nk?nk.value.trim()||nv:nv;
+  if(CFG[key].items.some(function(i){return i.v===keyVal;})){toast("Already exists","err");return;}
+  var ni={v:keyVal,color:nc?nc.value:"#4da6ff"};
+  if(key==="priority")ni.lbl=nv;
+  CFG[key].items.push(ni);
+  syncDropdowns();renderCfgEditor();renderCfgSidebar();toast("Added: "+nv);
+}
+function delCfgItem(key,idx){
+  var item=CFG[key].items[idx];
+  if(!confirm("Remove \""+esc(item.lbl||item.v)+"\"?"))return;
+  CFG[key].items.splice(idx,1);
+  syncDropdowns();renderCfgEditor();renderCfgSidebar();toast("Removed");
+}
+function editCfgItem(key,idx){
+  var item=CFG[key].items[idx];var isPrio=(key==="priority");
+  var row=document.getElementById("cfgrow-"+key+"-"+idx);if(!row)return;
+  row.innerHTML=
+    '<div style="width:12px;height:12px;border-radius:50%;background:'+item.color+';flex-shrink:0"></div>'+
+    '<input class="cfg-ie" id="ei-lbl" value="'+esc(item.lbl||item.v)+'" style="flex:1" placeholder="Label">'+
+    (isPrio?'<input class="cfg-ie" id="ei-key" value="'+esc(item.v)+'" style="width:60px">':"")+
+    '<input type="color" class="colpick" id="ei-col" value="'+item.color+'">'+
+    '<button class="cedit" onclick="saveCfgEdit(\''+key+'\','+idx+')">✓ Save</button>'+
+    '<button class="cdel" onclick="renderCfgEditor()">Cancel</button>';
+}
+function saveCfgEdit(key,idx){
+  var lbl=document.getElementById("ei-lbl"),kEl=document.getElementById("ei-key"),col=document.getElementById("ei-col");
+  if(!lbl||!lbl.value.trim()){toast("Cannot be empty","err");return;}
+  var isPrio=(key==="priority");
+  if(isPrio){CFG[key].items[idx].lbl=lbl.value.trim();if(kEl)CFG[key].items[idx].v=kEl.value.trim()||CFG[key].items[idx].v;}
+  else{CFG[key].items[idx].v=lbl.value.trim();}
+  if(col)CFG[key].items[idx].color=col.value;
+  syncDropdowns();renderCfgEditor();renderCfgSidebar();toast("Saved");
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+populateFormDropdowns();
+populateFilters();
+renderOverview();
+
+</script>
+</body>
+</html>
